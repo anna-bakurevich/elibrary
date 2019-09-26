@@ -7,16 +7,14 @@
 </head>
 <body>
 
-<div class="form">
-
-    <h1>Добро пожаловать в электронную библиотеку!</h1><br>
+    <h1 align="center">Добро пожаловать в электронную библиотеку!</h1><br>
     <form method="post" action="${pageContext.request.contextPath}/index">
 
-        <%--        <input type="text" required placeholder="login" name="login"><br>--%>
-        <%--        <input type="password" required placeholder="password" name="password"><br><br>--%>
+        <div style="text-align: center;">
         <input class="button" type="submit" value="Продолжить">
+        </div>
 
     </form>
-</div>
+
 </body>
 </html>
