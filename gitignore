@@ -36,7 +36,7 @@
 # .idea/modules.xml
 # .idea/*.iml
 # .idea/modules
-# *.iml
+*.iml
 # *.ipr
 
 # CMake
@@ -104,5 +104,4 @@ buildNumber.properties
 .flattened-pom.xml
 
 # End of https://www.gitignore.io/api/maven,intellij
-/elibrary.iml
-/web/web.iml
+
