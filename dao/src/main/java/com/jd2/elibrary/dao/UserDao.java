@@ -5,7 +5,17 @@ import com.jd2.elibrary.model.User;
 import java.util.List;
 
 public interface UserDao {
-    List<User> getUsers();
+    //create
     void addUser(String login, String password);
-    User getUserByLogin (String login);
+
+    //read
+    List<User> getUsers();
+
+    User getUserByLogin(String login);
+
+    //update
+    void updateUser(User user);
+
+    //delete
+    void removeUser(User user);
 }

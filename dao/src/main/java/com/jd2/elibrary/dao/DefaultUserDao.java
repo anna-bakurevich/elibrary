@@ -39,4 +39,14 @@ public class DefaultUserDao implements UserDao{
         }
         return user;
     }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
+
+    @Override
+    public void removeUser(User user) {
+
+    }
 }
