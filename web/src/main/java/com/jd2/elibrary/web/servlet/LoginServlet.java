@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
 
@@ -25,11 +26,15 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        if (authUserService.userIsExist(login, password)) {
-            req.setAttribute("authUser", login);
-            forwardToJsp("privatePage", req, resp);
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/registration");
+        try {
+            if (authUserService.userIsExist(login, password)) {
+                req.setAttribute("authUser", login);
+                forwardToJsp("privatePage", req, resp);
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/registration");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
