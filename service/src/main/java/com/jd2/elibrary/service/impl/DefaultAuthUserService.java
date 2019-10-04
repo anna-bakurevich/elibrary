@@ -21,7 +21,7 @@ public class DefaultAuthUserService implements AuthUserService {
 
 
     @Override
-    public boolean userIsExist(String login, String password) {
+    public boolean userIsExist(String login, String password) throws SQLException {
         boolean result = false;
 
         for (User user : userDao.getUsers()) {
