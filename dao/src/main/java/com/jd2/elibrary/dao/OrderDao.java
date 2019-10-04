@@ -2,6 +2,7 @@ package com.jd2.elibrary.dao;
 
 import com.jd2.elibrary.model.Order;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface OrderDao {
@@ -17,4 +18,6 @@ public interface OrderDao {
 
     //delete
     void removeOrder(Order order);
+
+    Connection connect();
 }

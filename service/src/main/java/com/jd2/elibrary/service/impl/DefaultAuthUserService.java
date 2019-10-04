@@ -1,8 +1,11 @@
-package com.jd2.elibrary.service;
+package com.jd2.elibrary.service.impl;
 
-import com.jd2.elibrary.dao.DefaultUserDao;
+import com.jd2.elibrary.dao.impl.DefaultUserDao;
 import com.jd2.elibrary.dao.UserDao;
 import com.jd2.elibrary.model.User;
+import com.jd2.elibrary.service.AuthUserService;
+
+import java.sql.SQLException;
 
 public class DefaultAuthUserService implements AuthUserService {
     private UserDao userDao = DefaultUserDao.getInstance();
@@ -31,12 +34,12 @@ public class DefaultAuthUserService implements AuthUserService {
     }
 
     @Override
-    public User getUserByLogin(String login) {
+    public User getUserByLogin(String login) throws SQLException {
         return userDao.getUserByLogin(login);
     }
 
     @Override
-    public void addUser(String login, String password) {
-        userDao.addUser(login, password);
+    public void addUser(User user) throws SQLException {
+        userDao.addUser(user);
     }
 }

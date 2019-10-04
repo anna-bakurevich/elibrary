@@ -1,7 +1,7 @@
 package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.service.AuthUserService;
-import com.jd2.elibrary.service.DefaultAuthUserService;
+import com.jd2.elibrary.service.impl.DefaultAuthUserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,9 +27,9 @@ public class RegistrationServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         //если пользователя нет в базе, добавляем его
-        if (authUserService.userIsExist(login, password)) {
-            authUserService.addUser(login, password);
-        }
+//        if (authUserService.userIsExist(login, password)) {
+//            authUserService.addUser(login, password);
+//        }
         req.setAttribute("login", login);
         forwardToJsp("privatePage", req, resp);
     }

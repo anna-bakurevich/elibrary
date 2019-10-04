@@ -8,6 +8,9 @@ public class User {
     private String login;
     private String password;
 
+    public User(){
+    }
+
     public User(String login, String password) {
         this.login = login;
         this.password = password;
@@ -38,4 +41,27 @@ public class User {
         return password;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

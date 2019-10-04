@@ -1,10 +1,8 @@
 package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.service.AuthUserService;
-import com.jd2.elibrary.service.DefaultAuthUserService;
-import com.jd2.elibrary.web.WebUtils;
+import com.jd2.elibrary.service.impl.DefaultAuthUserService;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
