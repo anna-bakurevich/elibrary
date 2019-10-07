@@ -21,25 +21,25 @@ public class DefaultAuthUserService implements AuthUserService {
 
 
     @Override
-    public boolean userIsExist(String login, String password) throws SQLException {
-        boolean result = false;
+    public boolean userIsExist(String login, String password) throws SQLException, IllegalAccessException,
+            InstantiationException, ClassNotFoundException {
 
-        for (User user : userDao.getUsers()) {
-            if (user.getLogin().equals(login) && user.getPassword().equals(password)) {
-                result = true;
-                break;
-            }
+        boolean result = false;
+        //если вернется id!=0, то пользователь с таким логином и паролем уже существует в базе
+        if (getIdByLoginAndPassword(login, password) != 0) {
+            result = true;
         }
         return result;
     }
 
     @Override
-    public User getUserByLogin(String login) throws SQLException {
-        return userDao.getUserByLogin(login);
+    public int getIdByLoginAndPassword(String login, String password) throws SQLException, IllegalAccessException,
+            ClassNotFoundException, InstantiationException {
+        return userDao.getIdByLoginAndPassword(login, password);
     }
 
     @Override
-    public void addUser(User user) throws SQLException {
-        userDao.addUser(user);
+    public void saveUser(User user) throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException {
+        userDao.saveUser(user);
     }
 }

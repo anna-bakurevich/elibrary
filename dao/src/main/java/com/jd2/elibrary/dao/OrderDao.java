@@ -2,12 +2,11 @@ package com.jd2.elibrary.dao;
 
 import com.jd2.elibrary.model.Order;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface OrderDao {
     //create
-    void addOrder(Order order);
+    void saveOrder(Order order);
 
     //read
     List<Order> getOrders();
@@ -19,5 +18,4 @@ public interface OrderDao {
     //delete
     void removeOrder(Order order);
 
-    Connection connect();
 }

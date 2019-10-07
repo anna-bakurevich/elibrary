@@ -28,12 +28,12 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
         try {
             if (authUserService.userIsExist(login, password)) {
-                req.setAttribute("authUser", login);
+                req.setAttribute("login", login);
                 forwardToJsp("privatePage", req, resp);
             } else {
                 resp.sendRedirect(req.getContextPath() + "/registration");
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

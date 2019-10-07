@@ -4,12 +4,11 @@ import com.jd2.elibrary.model.BlackList;
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.User;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface BlackListDao {
     //create
-    void add();
+    void saveBlackUser();
 
     //read
     List<BlackList> getBlackList();
@@ -21,5 +20,4 @@ public interface BlackListDao {
     //delete
     void removeBlackListUser(User user, Book book);
 
-    Connection connect();
 }

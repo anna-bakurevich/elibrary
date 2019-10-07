@@ -1,14 +1,17 @@
 package com.jd2.elibrary.dao.impl;
 
 import com.jd2.elibrary.dao.BookDao;
+import com.jd2.elibrary.dao.DataSource;
 import com.jd2.elibrary.model.Book;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class DefaultBookDao implements BookDao {
+    private static final Logger log = LoggerFactory.getLogger(DefaultUserDao.class);
     private static DefaultBookDao instance;
 
     public static synchronized DefaultBookDao getInstance(){
@@ -18,18 +21,15 @@ public class DefaultBookDao implements BookDao {
         return instance;
     }
 
-    public Connection connect() throws SQLException {
-        ResourceBundle resource = ResourceBundle.getBundle("db");
-        String url = resource.getString("url");
-        String user = resource.getString("user");
-        String password = resource.getString("password");
-        return DriverManager.getConnection(url, user, password);
+    private Connection connect() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+        return DataSource.getInstance().getConnection();
     }
 
+
     @Override
-    public void addBook(Book book) throws SQLException {
-        BookDao dataBase = DefaultBookDao.getInstance();
-        try (Connection connection = dataBase.connect();
+    public void saveBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException,
+            InstantiationException {
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement
                      ("insert into book(isbn, author_first_name, author_last_name,title, genre) values (?, ?, ?, ?, ?)")) {
             preparedStatement.setString(1, book.getIsbn());
@@ -43,11 +43,10 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public List<Book> getBooks() throws SQLException {
+    public List<Book> getBooks() throws SQLException, IllegalAccessException, ClassNotFoundException,
+            InstantiationException {
         List<Book> bookList = new ArrayList<>();
-        BookDao dataBase = DefaultBookDao.getInstance();
-
-        try (Connection connection = dataBase.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("select * from book")) {
             while (resultSet.next()) {
@@ -66,10 +65,10 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public Book getById(int id) throws SQLException {
+    public Book getById(int id) throws SQLException, IllegalAccessException, ClassNotFoundException,
+            InstantiationException {
         Book book = new Book();
-        BookDao dataBase = DefaultBookDao.getInstance();
-        try (Connection connection = dataBase.connect();
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement("select * from book where id=?")) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -85,9 +84,9 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public void updateBook(Book book) throws SQLException {
-        BookDao dataBase = DefaultBookDao.getInstance();
-        try (Connection connection = dataBase.connect();
+    public void updateBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException,
+            InstantiationException {
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement("update book set isbn=?, " +
                      "author_first_name=?, author_last_name=?, title=?, genre=? where id=?")) {
 
@@ -101,9 +100,9 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public void removeBook(Book book) throws SQLException {
-        BookDao dataBase = DefaultBookDao.getInstance();
-        try (Connection connection = dataBase.connect();
+    public void removeBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException,
+            InstantiationException {
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement("delete from book where id=?")) {
 
             preparedStatement.setInt(1, book.getId());

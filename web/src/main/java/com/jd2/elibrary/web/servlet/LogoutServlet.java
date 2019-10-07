@@ -14,7 +14,7 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //удаление объекта с указанным именем из сессии
-        req.getSession().removeAttribute("authUser");
+        req.getSession().removeAttribute("login");
         //установка сессии недействительной и отмена привязки объектов, связанных с ней
         req.getSession().invalidate();
         //перенаправление на страницу логина

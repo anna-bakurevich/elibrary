@@ -1,5 +1,6 @@
 package com.jd2.elibrary.web.servlet;
 
+import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.AuthUserService;
 import com.jd2.elibrary.service.impl.DefaultAuthUserService;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
 
@@ -27,9 +29,16 @@ public class RegistrationServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         //если пользователя нет в базе, добавляем его
-//        if (authUserService.userIsExist(login, password)) {
-//            authUserService.addUser(login, password);
-//        }
+        try {
+//            if (!authUserService.userIsExist(login, password)) {
+            User user = new User();
+            user.setLogin(login);
+            user.setPassword(password);
+            authUserService.saveUser(user);
+//            }
+        } catch (SQLException | IllegalAccessException | ClassNotFoundException | InstantiationException e) {
+            e.printStackTrace();
+        }
         req.setAttribute("login", login);
         forwardToJsp("privatePage", req, resp);
     }

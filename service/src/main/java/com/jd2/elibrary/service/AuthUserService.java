@@ -5,9 +5,11 @@ import com.jd2.elibrary.model.User;
 import java.sql.SQLException;
 
 public interface AuthUserService {
-    boolean userIsExist(String login, String password) throws SQLException;
+    boolean userIsExist(String login, String password) throws SQLException,
+            IllegalAccessException, InstantiationException, ClassNotFoundException;
 
-    User getUserByLogin(String login) throws SQLException;
+    int getIdByLoginAndPassword(String login, String password) throws SQLException,
+            IllegalAccessException, ClassNotFoundException, InstantiationException;
 
-    void addUser(User user) throws SQLException;
+    void saveUser(User user) throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException;
 }
