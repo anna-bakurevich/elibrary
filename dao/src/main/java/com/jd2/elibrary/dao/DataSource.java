@@ -10,6 +10,11 @@ public class DataSource {
     private final ComboPooledDataSource pool;
 
     public DataSource() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         pool = new ComboPooledDataSource();
         ResourceBundle resource = ResourceBundle.getBundle("db");
         pool.setJdbcUrl(resource.getString("url"));
@@ -31,9 +36,8 @@ public class DataSource {
         return instance;
     }
 
-    public Connection getConnection() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public Connection getConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             return this.pool.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);

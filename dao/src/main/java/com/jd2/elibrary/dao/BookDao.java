@@ -8,17 +8,17 @@ import java.util.List;
 public interface BookDao {
 
     //create
-    void saveBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException;
+    void saveBook(Book book) throws SQLException;
 
     //read
-    List<Book> getBooks() throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException;
+    List<Book> getBooks();
 
-    Book getById(int id) throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException;
+    Book getById(int id) throws SQLException;
 
     //update
-    void updateBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException;
+    void updateBook(Book book) throws SQLException;
 
     //delete
-    void removeBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException;
+    void removeBook(Book book) throws SQLException;
 
 }

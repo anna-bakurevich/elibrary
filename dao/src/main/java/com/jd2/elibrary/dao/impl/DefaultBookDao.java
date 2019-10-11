@@ -14,41 +14,42 @@ public class DefaultBookDao implements BookDao {
     private static final Logger log = LoggerFactory.getLogger(DefaultUserDao.class);
     private static DefaultBookDao instance;
 
-    public static synchronized DefaultBookDao getInstance(){
-        if(instance==null){
+    public static synchronized DefaultBookDao getInstance() {
+        if (instance == null) {
             instance = new DefaultBookDao();
         }
         return instance;
     }
 
-    private Connection connect() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    private Connection connect() {
         return DataSource.getInstance().getConnection();
     }
 
 
     @Override
-    public void saveBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException {
+    public void saveBook(Book book) throws SQLException {
         try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement
-                     ("insert into book(isbn, author_first_name, author_last_name,title, genre) values (?, ?, ?, ?, ?)")) {
+                     ("INSERT INTO book(isbn, author_first_name, author_last_name,title, genre, count) " +
+                             "VALUES (?, ?, ?, ?, ?, ?)")) {
             preparedStatement.setString(1, book.getIsbn());
             preparedStatement.setString(2, book.getAuthorFirstName());
             preparedStatement.setString(3, book.getAuthorLastName());
             preparedStatement.setString(4, book.getTitle());
             preparedStatement.setString(5, book.getGenre());
+            preparedStatement.setInt(6, book.getCount());
 
             preparedStatement.executeUpdate();
         }
     }
 
     @Override
-    public List<Book> getBooks() throws SQLException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException {
-        List<Book> bookList = new ArrayList<>();
+    public List<Book> getBooks() {
+
         try (Connection connection = connect();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("select * from book")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM book");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            final List<Book> bookList = new ArrayList<>();
             while (resultSet.next()) {
                 Book book = new Book();
                 book.setId(resultSet.getInt("id"));
@@ -57,53 +58,59 @@ public class DefaultBookDao implements BookDao {
                 book.setAuthorLastName(resultSet.getString("author_last_name"));
                 book.setTitle(resultSet.getString("title"));
                 book.setGenre(resultSet.getString("genre"));
+                book.setCount(resultSet.getInt("count"));
 
                 bookList.add(book);
             }
+            return bookList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return bookList;
     }
 
     @Override
-    public Book getById(int id) throws SQLException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException {
+    public Book getById(int id) {
         Book book = new Book();
         try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement("select * from book where id=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM book WHERE id=?")) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
+            {
 
-            book.setId(resultSet.getInt("id"));
-            book.setIsbn(resultSet.getString("isbn"));
-            book.setAuthorFirstName(resultSet.getString("author_first_name"));
-            book.setAuthorLastName(resultSet.getString("author_last_name"));
-            book.setTitle(resultSet.getString("title"));
-            book.setGenre(resultSet.getString("genre"));
+                book.setId(resultSet.getInt("id"));
+                book.setIsbn(resultSet.getString("isbn"));
+                book.setAuthorFirstName(resultSet.getString("author_first_name"));
+                book.setAuthorLastName(resultSet.getString("author_last_name"));
+                book.setTitle(resultSet.getString("title"));
+                book.setGenre(resultSet.getString("genre"));
+                book.setCount(resultSet.getInt("count"));
+            }
+            return book;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return book;
     }
 
     @Override
-    public void updateBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException {
+    public void updateBook(Book book) throws SQLException {
         try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement("update book set isbn=?, " +
-                     "author_first_name=?, author_last_name=?, title=?, genre=? where id=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE book SET isbn=?, " +
+                     "author_first_name=?, author_last_name=?, title=?, genre=?, count=? WHERE id=?")) {
 
             preparedStatement.setString(1, book.getIsbn());
             preparedStatement.setString(2, book.getAuthorFirstName());
             preparedStatement.setString(3, book.getAuthorLastName());
             preparedStatement.setString(4, book.getTitle());
             preparedStatement.setString(5, book.getGenre());
+            preparedStatement.setInt(6, book.getCount());
 
         }
     }
 
     @Override
-    public void removeBook(Book book) throws SQLException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException {
+    public void removeBook(Book book) throws SQLException {
         try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement("delete from book where id=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM book WHERE id=?")) {
 
             preparedStatement.setInt(1, book.getId());
         }

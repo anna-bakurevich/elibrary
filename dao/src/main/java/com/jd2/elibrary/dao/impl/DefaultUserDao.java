@@ -2,16 +2,14 @@ package com.jd2.elibrary.dao.impl;
 
 import com.jd2.elibrary.dao.DataSource;
 import com.jd2.elibrary.dao.UserDao;
+import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultUserDao implements UserDao {
-    private static final Logger log = LoggerFactory.getLogger(DefaultUserDao.class);
     private static DefaultUserDao instance;
 
     public static synchronized DefaultUserDao getInstance() {
@@ -21,77 +19,162 @@ public class DefaultUserDao implements UserDao {
         return instance;
     }
 
-    private Connection connect() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    private Connection connect() {
         return DataSource.getInstance().getConnection();
     }
 
     @Override
-    public void saveUser(User user) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
+    public int saveUser(User user) {
         try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "insert into user(login, password) values (?, ?)")) {
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
+                     "INSERT INTO user(first_name, last_name, phone, login, password, role) VALUES (?,?,?,?,?,?)",
+                     Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getPhone());
+            preparedStatement.setString(4, user.getLogin());
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setString(6, "CUSTOMER");
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public List<User> getUsers() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
-        List<User> users = new ArrayList<>();
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("select * from user")) {
-            while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getInt("id"));
-                user.setFirst_name(resultSet.getString("first_name"));
-                user.setLast_name(resultSet.getString("last_name"));
-                user.setPhone(resultSet.getString("phone"));
-                user.setLogin(resultSet.getString("login"));
-                user.setPassword(resultSet.getString("password"));
-
-                users.add(user);
+            try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
+                keys.next();
+                return keys.getInt(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return users;
     }
 
     @Override
-    public int getIdByLoginAndPassword(String login, String password) throws SQLException,
-            IllegalAccessException, ClassNotFoundException, InstantiationException {
+    public void updateUser(User user) {
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user SET first_name=?, " +
+                     "last_name=?, phone=? WHERE id=?")) {
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getPhone());
+            preparedStatement.setInt(4, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void removeUser(int id) {
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM user WHERE id=?")) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<User> getUsers() {
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            final ArrayList<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                final User user = new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("phone"),
+                        resultSet.getString("login"),
+                        resultSet.getString("password"));
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public User getByLogin(String login) {
         try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "select * from user where login = ? and password = ?")) {
+                     "SELECT * FROM user WHERE login = ?")) {
             preparedStatement.setString(1, login);
-            preparedStatement.setString(2, password);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(
+                            resultSet.getInt("id"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("phone"),
+                            resultSet.getString("login"),
+                            resultSet.getString("password"),
+                            Role.valueOf(resultSet.getString("role")
+                            ));
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public User getById(int id) {
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM user WHERE id = ?")) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(
+                            resultSet.getInt("id"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("phone"),
+                            resultSet.getString("login"),
+                            resultSet.getString("password"),
+                            Role.valueOf(resultSet.getString("role")
+                            ));
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean idIsExist(int id) {
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM user WHERE id = ?")) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    @Override
+    public int getIdByLogin(String login) {
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM user WHERE login = ?")) {
+            preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt("id");
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return 0;
     }
-
-    @Override
-    public void updateUser(User user) {
-
-    }
-
-    @Override
-    public void removeUser(User user) throws SQLException, IllegalAccessException, ClassNotFoundException,
-            InstantiationException {
-        try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement("delete from user where id=?")) {
-
-            preparedStatement.setInt(1, user.getId());
-        }
-    }
-
-
 }

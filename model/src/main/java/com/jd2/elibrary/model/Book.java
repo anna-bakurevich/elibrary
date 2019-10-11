@@ -7,6 +7,11 @@ public class Book {
     private String authorLastName;
     private String title;
     private String genre;
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
 
     public String getGenre() {
         return genre;
@@ -55,4 +60,9 @@ public class Book {
     public void setGenre(String genre) {
         this.genre = genre;
     }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
 }

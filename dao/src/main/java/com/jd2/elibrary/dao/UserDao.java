@@ -2,22 +2,27 @@ package com.jd2.elibrary.dao;
 
 import com.jd2.elibrary.model.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDao {
     //create
-    void saveUser(User user) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException;
+    int saveUser(User user);
 
     //read
-    List<User> getUsers() throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException;
+    List<User> getUsers();
 
-    int getIdByLoginAndPassword(String login, String password) throws SQLException, IllegalAccessException,
-            InstantiationException, ClassNotFoundException;
 
     //update
     void updateUser(User user);
 
     //delete
-    void removeUser(User user) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException;
+    void removeUser(int id);
+
+    User getByLogin(String login);
+
+    User getById(int id);
+
+    int getIdByLogin(String login);
+
+    boolean idIsExist(int id);
 }

@@ -12,11 +12,6 @@ import java.io.IOException;
 @WebFilter("/index")
 public class AuthFilter implements Filter {
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
-
-    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
@@ -24,17 +19,13 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        Object authUser = request.getSession().getAttribute("authUser");
+        Object authUser = request.getSession().getAttribute("login");
 
         //если пользователя нет в системе перенаправляем его на страницу логина
         if (authUser == null) {
             WebUtils.forwardToJsp("login", request, response);
+            return;
         }
         filterChain.doFilter(request, response);
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }

@@ -1,7 +1,5 @@
 package com.jd2.elibrary.web.servlet;
 
-import com.jd2.elibrary.web.WebUtils;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet
+import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
+
+@WebServlet(urlPatterns = "/logout")
 public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -18,6 +18,6 @@ public class LogoutServlet extends HttpServlet {
         //установка сессии недействительной и отмена привязки объектов, связанных с ней
         req.getSession().invalidate();
         //перенаправление на страницу логина
-        WebUtils.forwardToJsp("login", req, resp);
+        forwardToJsp("login", req, resp);
     }
 }

@@ -1,6 +1,7 @@
 package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.User;
+import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.service.AuthUserService;
 import com.jd2.elibrary.service.impl.DefaultAuthUserService;
 import org.slf4j.Logger;
@@ -12,33 +13,32 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
 import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
 
-@WebServlet(urlPatterns = "/login")
-public class LoginServlet extends HttpServlet {
-    private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
+@WebServlet("/privatePage")
+public class PrivatePageServlet extends HttpServlet {
+    private static final Logger log = LoggerFactory.getLogger(PrivatePageServlet.class);
     private AuthUserService authUserService = DefaultAuthUserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        forwardToJsp("login", req, resp);
+        List<User> users = authUserService.getUsers();
+        List<Book> books = authUserService.getBooks();
+        req.setAttribute("users", users);
+        req.setAttribute("books", books);
+        forwardToJsp("privatePage", req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
-        User user = authUserService.login(login, password);
-        if (user == null) {
-            req.setAttribute("error", "login or password invalid");
-            redirectToJsp("/registration", req, resp);
-            return;
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("deleteId"));
+        if (authUserService.idIsExist(id)) {
+            authUserService.removeUser(id);
+            log.info("user {} deleted", id);
+            redirectToJsp("/privatePage", req, resp);
         }
-        log.info("user {} logged", user.getLogin());
-        req.getSession().setAttribute("login", user);
-        redirectToJsp("/privatePage", req, resp);
     }
 }
-

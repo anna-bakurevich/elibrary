@@ -2,31 +2,45 @@ package com.jd2.elibrary.model;
 
 public class User {
     private int id;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String phone;
     private String login;
     private String password;
+    private Role role;
+
 
     public User(){
     }
 
-    public User(String login, String password) {
+    public User(int id, String firstName, String lastName, String phone, String login, String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
         this.login = login;
         this.password = password;
-
     }
 
+    public User(int id, String firstName, String lastName, String phone, String login, String password, Role role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
     public int getId() {
         return id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getPhone() {
@@ -45,12 +59,20 @@ public class User {
         this.id = id;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public Role getRole() {
+        return role;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setPhone(String phone) {
