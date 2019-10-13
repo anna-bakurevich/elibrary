@@ -34,11 +34,12 @@ public class DefaultUserDao implements UserDao {
             preparedStatement.setString(3, user.getPhone());
             preparedStatement.setString(4, user.getLogin());
             preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, "CUSTOMER");
+            preparedStatement.setString(6, Role.CUSTOMER.name());
             preparedStatement.executeUpdate();
             try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
                 keys.next();
-                return keys.getInt(1);
+                user.setId(keys.getInt(1));
+                return user.getId();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -2,8 +2,10 @@ package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.model.Book;
-import com.jd2.elibrary.service.AuthUserService;
-import com.jd2.elibrary.service.impl.DefaultAuthUserService;
+import com.jd2.elibrary.service.impl.AuthUserService;
+import com.jd2.elibrary.service.impl.BookService;
+import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
+import com.jd2.elibrary.service.impl.impl.DefaultBookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +24,12 @@ import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
 public class PrivatePageServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(PrivatePageServlet.class);
     private AuthUserService authUserService = DefaultAuthUserService.getInstance();
+    private BookService bookService = DefaultBookService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<User> users = authUserService.getUsers();
-        List<Book> books = authUserService.getBooks();
+        List<Book> books = bookService.getBooks();
         req.setAttribute("users", users);
         req.setAttribute("books", books);
         forwardToJsp("privatePage", req, resp);

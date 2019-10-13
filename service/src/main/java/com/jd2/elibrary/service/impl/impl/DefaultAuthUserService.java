@@ -1,18 +1,14 @@
-package com.jd2.elibrary.service.impl;
+package com.jd2.elibrary.service.impl.impl;
 
-import com.jd2.elibrary.dao.BookDao;
 import com.jd2.elibrary.dao.UserDao;
-import com.jd2.elibrary.dao.impl.DefaultBookDao;
 import com.jd2.elibrary.dao.impl.DefaultUserDao;
-import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.User;
-import com.jd2.elibrary.service.AuthUserService;
+import com.jd2.elibrary.service.impl.AuthUserService;
 
 import java.util.List;
 
 public class DefaultAuthUserService implements AuthUserService {
     private UserDao userDao = DefaultUserDao.getInstance();
-    private BookDao bookDao = DefaultBookDao.getInstance();
 
     private static AuthUserService instance;
 
@@ -28,10 +24,6 @@ public class DefaultAuthUserService implements AuthUserService {
         return userDao.getUsers();
     }
 
-    @Override
-    public List<Book> getBooks() {
-        return bookDao.getBooks();
-    }
 
     @Override
     public void saveUser(User user) {

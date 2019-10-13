@@ -1,6 +1,5 @@
-package com.jd2.elibrary.service;
+package com.jd2.elibrary.service.impl;
 
-import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.User;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 public interface AuthUserService {
     List<User> getUsers();
 
-    List<Book> getBooks();
+   // List<Book> getBooks();
 
     User login(String login, String password);
 
