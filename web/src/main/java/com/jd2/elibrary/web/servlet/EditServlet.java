@@ -16,29 +16,28 @@ import java.io.IOException;
 import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
 import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
 
-@WebServlet(urlPatterns = "/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/edit")
+public class EditServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
     private AuthUserService authUserService = DefaultAuthUserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        forwardToJsp("login", req, resp);
+        forwardToJsp("edit", req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
-        User user = authUserService.login(login, password);
-        if (user == null) {
-            req.setAttribute("error", "login or password invalid");
-            redirectToJsp("/registration", req, resp);
-            return;
-        }
-        log.info("user {} logged", user.getLogin());
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User user = (User) req.getSession().getAttribute("login");
+        String firstName = req.getParameter("firstName");
+        String lastName = req.getParameter("lastName");
+        String phone = req.getParameter("phone");
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPhone(phone);
+        authUserService.updateUser(user);
+        log.info("user {} update", user.getId());
         req.getSession().setAttribute("login", user);
         redirectToJsp("/privatePage", req, resp);
     }
 }
-
