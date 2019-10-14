@@ -50,8 +50,7 @@ public class RegistrationServlet extends HttpServlet {
             req.getSession().setAttribute("login", user);
             redirectToJsp("/privatePage", req, resp);
         } else {
-            req.setAttribute("error", "Пользователь с именем " + req.getParameter("login")
-                    + " уже существует в системе!");
+            req.setAttribute("error", true);
             log.info("user is not registered");
             forwardToJsp("registration", req, resp);
         }
