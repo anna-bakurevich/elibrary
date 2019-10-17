@@ -26,8 +26,8 @@ public class DefaultAuthUserService implements AuthUserService {
 
 
     @Override
-    public void saveUser(User user) {
-        userDao.saveUser(user);
+    public int saveUser(User user) {
+       return userDao.saveUser(user);
     }
 
 

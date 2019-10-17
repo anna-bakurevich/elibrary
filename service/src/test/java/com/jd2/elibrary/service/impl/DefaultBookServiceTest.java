@@ -2,7 +2,7 @@ package com.jd2.elibrary.service.impl;
 
 import com.jd2.elibrary.dao.BookDao;
 import com.jd2.elibrary.model.Book;
-import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
+import com.jd2.elibrary.service.impl.impl.DefaultBookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,17 +16,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DefaultBookServiceTest {
+class DefaultBookServiceTest {
     @Mock
     BookDao dao;
 
     @InjectMocks
-    DefaultAuthUserService service;
+    DefaultBookService service;
 
     @Test
-    void getUsersTest() {
-        when(dao.getBooks()).thenReturn(new ArrayList<Book>());
-        List<Book> books = dao.getBooks();
+    void getBooksTest() {
+       when(dao.getBooks()).thenReturn(new ArrayList<Book>());
+        List<Book> books = service.getBooks();
         assertNotNull(books);
     }
 }

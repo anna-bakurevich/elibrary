@@ -30,9 +30,31 @@ public class DefaultAuthUserServiceTest {
         assertNotNull(users);
     }
     @Test
-    void getByLoginTest() {
+    void loginTest() {
         when(dao.getByLogin("Anna")).thenReturn(new User(100, null, null, null,"Anna", "123") );
         User user = service.login("Anna", "123");
         assertNotNull(user);
+        when(dao.getByLogin("Ivan")).thenReturn(null);
+        User user1 = service.login("Ivan", "123");
+        assertNull(user1);
+    }
+
+    @Test
+    void idIsExistTest(){
+        when(dao.idIsExist(1)).thenReturn(true);
+        User user = new User(1, null, null,null,null,null);
+        assertTrue(service.idIsExist(user.getId()));
+    }
+
+    @Test
+    void getIdByLoginTest(){
+        when(dao.getIdByLogin("Anna")).thenReturn(1);
+        assertEquals(1, service.getIdByLogin("Anna"));
+    }
+
+    @Test
+    void idTest(){
+        when((dao.getById(1))).thenReturn(new User(1, null, null,null,null,null));
+        assertNotNull(service.id(1));
     }
 }

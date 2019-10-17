@@ -1,13 +1,13 @@
 
 package com.jd2.elibrary.web.filter;
 
-import com.jd2.elibrary.web.WebUtils;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
 
 @WebFilter("/index")
 public class AuthFilter implements Filter {
@@ -23,7 +23,7 @@ public class AuthFilter implements Filter {
 
         //если пользователя нет в системе перенаправляем его на страницу логина
         if (authUser == null) {
-            WebUtils.forwardToJsp("login", request, response);
+            forwardToJsp("login", request, response);
             return;
         }
         filterChain.doFilter(request, response);

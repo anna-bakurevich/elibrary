@@ -17,7 +17,7 @@ public interface AuthUserService {
 
     int getIdByLogin(String login);
 
-    void saveUser(User user);
+    int saveUser(User user);
 
     void removeUser(int id);
 

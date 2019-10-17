@@ -19,7 +19,7 @@ public class DefaultUserDaoTest {
     }
 
     @Test
-    void getIdByLoginTest(){
+    void getIdByLoginTest() {
         assertEquals(1, dao.getIdByLogin("Anna"));
     }
 

@@ -30,6 +30,7 @@
             <artifactId>c3p0</artifactId>
             <version>0.9.5.4</version>
         </dependency>
+
     </dependencies>
 
     <build>

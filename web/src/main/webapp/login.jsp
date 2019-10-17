@@ -18,7 +18,7 @@
 
     <input type="text" required placeholder="login" name="login"><br>
     <input type="text" required placeholder="password" name="password"><br><br>
-    <input class="button" type="submit" value=<fmt:message key="login" bundle="${messages}"/>>
+    <input class="button" type="submit" value=<fmt:message key="button.login" bundle="${messages}"/>>
     <a href="<c:url value="/registration"/>"><fmt:message key="signup" bundle="${messages}"/></a>
 
 </form>
