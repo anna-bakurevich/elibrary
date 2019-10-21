@@ -2,7 +2,7 @@ package com.jd2.elibrary.service.impl.impl;
 
 import com.jd2.elibrary.dao.UserDao;
 import com.jd2.elibrary.dao.impl.DefaultUserDao;
-import com.jd2.elibrary.model.User;
+import com.jd2.elibrary.model.entity.User;
 import com.jd2.elibrary.service.impl.AuthUserService;
 
 import java.util.List;

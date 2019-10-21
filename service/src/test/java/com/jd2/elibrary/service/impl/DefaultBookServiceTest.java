@@ -1,7 +1,7 @@
 package com.jd2.elibrary.service.impl;
 
 import com.jd2.elibrary.dao.BookDao;
-import com.jd2.elibrary.model.Book;
+import com.jd2.elibrary.model.entity.Book;
 import com.jd2.elibrary.service.impl.impl.DefaultBookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -2,8 +2,8 @@ package com.jd2.elibrary.dao.impl;
 
 import com.jd2.elibrary.dao.DataSource;
 import com.jd2.elibrary.dao.UserDao;
-import com.jd2.elibrary.model.Role;
-import com.jd2.elibrary.model.User;
+import com.jd2.elibrary.model.entity.Role;
+import com.jd2.elibrary.model.entity.User;
 
 import java.sql.*;
 import java.util.ArrayList;

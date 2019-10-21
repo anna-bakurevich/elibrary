@@ -1,4 +1,4 @@
-package com.jd2.elibrary.model;
+package com.jd2.elibrary.model.entity;
 
 public enum Role {
     CUSTOMER,

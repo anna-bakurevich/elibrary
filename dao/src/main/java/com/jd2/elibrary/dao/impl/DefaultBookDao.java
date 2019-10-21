@@ -2,7 +2,7 @@ package com.jd2.elibrary.dao.impl;
 
 import com.jd2.elibrary.dao.BookDao;
 import com.jd2.elibrary.dao.DataSource;
-import com.jd2.elibrary.model.Book;
+import com.jd2.elibrary.model.entity.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

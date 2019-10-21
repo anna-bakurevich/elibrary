@@ -1,6 +1,6 @@
 package com.jd2.elibrary.web.servlet;
 
-import com.jd2.elibrary.model.User;
+import com.jd2.elibrary.model.entity.User;
 import com.jd2.elibrary.service.impl.AuthUserService;
 import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
 import org.slf4j.Logger;
