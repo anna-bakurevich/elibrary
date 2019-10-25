@@ -1,7 +1,7 @@
 package com.jd2.elibrary.service.impl;
 
 import com.jd2.elibrary.dao.UserDao;
-import com.jd2.elibrary.model.entity.User;
+import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

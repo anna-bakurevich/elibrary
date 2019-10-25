@@ -1,7 +1,7 @@
 package com.jd2.elibrary.web.servlet;
 
-import com.jd2.elibrary.model.entity.User;
-import com.jd2.elibrary.model.entity.Book;
+import com.jd2.elibrary.model.User;
+import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.service.impl.AuthUserService;
 import com.jd2.elibrary.service.impl.BookService;
 import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;

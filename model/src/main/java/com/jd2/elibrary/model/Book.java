@@ -1,4 +1,4 @@
-package com.jd2.elibrary.model.entity;
+package com.jd2.elibrary.model;
 
 public class Book {
     private int id;
@@ -6,14 +6,27 @@ public class Book {
     private String authorFirstName;
     private String authorLastName;
     private String title;
-    private String genre;
+    private BookGenre genre;
     private int count;
+
+    public Book() {
+    }
+
+    public Book(int id, String isbn, String authorFirstName, String authorLastName, String title, BookGenre genre, int count) {
+        this.id = id;
+        this.isbn = isbn;
+        this.authorFirstName = authorFirstName;
+        this.authorLastName = authorLastName;
+        this.title = title;
+        this.genre = genre;
+        this.count = count;
+    }
 
     public int getCount() {
         return count;
     }
 
-    public String getGenre() {
+    public BookGenre getGenre() {
         return genre;
     }
 
@@ -57,7 +70,7 @@ public class Book {
         this.title = title;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(BookGenre genre) {
         this.genre = genre;
     }
 

@@ -1,6 +1,6 @@
 package com.jd2.elibrary.service.impl;
 
-import com.jd2.elibrary.model.entity.User;
+import com.jd2.elibrary.model.User;
 
 import java.util.List;
 

@@ -2,20 +2,20 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
-    <persistence-unit name="com.jd2.elibrary.model" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="com.jd2.elibrary" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.jd2.elibrary.model.entity.User</class>
+        <class>com.jd2.elibrary.dao.entity.UserEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
-            <property name="avax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://localhost:3306/com?createDatabaseIfNotExist=true"/>
+                      value="jdbc:mysql://localhost:3306/my_schema?createDatabaseIfNotExist=true"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="Bakure1974!"/>
             <property name="hibernate.dialect.storage_engine" value="innodb"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
-            <property name="hibernate.use_sql_comments" value="true"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+<!--            <property name="hibernate.use_sql_comments" value="true"/>-->
+<!--            <property name="hibernate.show_sql" value="true"/>-->
             <property name="hibernate.connection.pool_size" value="10"/>
         </properties>
     </persistence-unit>

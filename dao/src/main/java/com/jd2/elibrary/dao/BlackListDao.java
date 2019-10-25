@@ -1,8 +1,8 @@
 package com.jd2.elibrary.dao;
 
-import com.jd2.elibrary.model.entity.BlackList;
-import com.jd2.elibrary.model.entity.Book;
-import com.jd2.elibrary.model.entity.User;
+import com.jd2.elibrary.model.BlackList;
+import com.jd2.elibrary.model.Book;
+import com.jd2.elibrary.model.User;
 
 import java.util.List;
 

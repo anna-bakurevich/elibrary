@@ -1,6 +1,6 @@
 package com.jd2.elibrary.dao;
 
-import com.jd2.elibrary.model.entity.Order;
+import com.jd2.elibrary.model.Order;
 
 import java.util.List;
 
