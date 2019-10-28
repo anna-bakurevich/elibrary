@@ -10,18 +10,18 @@ public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
+    @Column(name = "isbn")
     private String isbn;
     @Column(name = "author_first_name")
     private String authorFirstName;
     @Column(name = "author_last_name")
     private String authorLastName;
-    @Column
+    @Column(name = "title")
     private String title;
-    @Column
+    @Column(name = "genre")
     @Enumerated(value = EnumType.STRING)
     private BookGenre genre;
-    @Column
+    @Column(name = "count")
     private int count;
 
     public BookEntity() {

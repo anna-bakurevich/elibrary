@@ -14,13 +14,13 @@ public class UserEntity {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @Column()
+    @Column(name = "phone")
     private String phone;
-    @Column
+    @Column(name = "login")
     private String login;
-    @Column
+    @Column(name = "password")
     private String password;
-    @Column
+    @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
     private Role role;
 

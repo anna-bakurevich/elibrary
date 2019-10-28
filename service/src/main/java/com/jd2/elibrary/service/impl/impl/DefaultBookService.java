@@ -23,4 +23,14 @@ public class DefaultBookService implements BookService {
     public List<Book> getBooks() {
         return bookDao.getBooks();
     }
+
+    @Override
+    public Book getById(int id) {
+        return bookDao.getById(id);
+    }
+
+    @Override
+    public void saveBook(Book book) {
+        bookDao.saveBook(book);
+    }
 }

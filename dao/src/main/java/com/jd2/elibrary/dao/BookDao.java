@@ -21,4 +21,5 @@ public interface BookDao {
     //delete
     void removeBook(Book book) throws SQLException;
 
+    boolean findById(int id);
 }

@@ -43,7 +43,10 @@ public class DefaultAuthUserService implements AuthUserService {
 
     @Override
     public boolean idIsExist(int id) {
-        return userDao.idIsExist(id);
+        if (userDao.findById(id)){
+            return true;
+        }
+        return false;
     }
 
     @Override

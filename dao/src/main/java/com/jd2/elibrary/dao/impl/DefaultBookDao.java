@@ -4,6 +4,7 @@ import com.jd2.elibrary.dao.BookDao;
 import com.jd2.elibrary.dao.DataSource;
 import com.jd2.elibrary.dao.entity.BookEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
+import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Book;
 
 
@@ -30,14 +31,7 @@ public class DefaultBookDao implements BookDao {
 
     @Override
     public void saveBook(Book book) {
-        BookEntity bookEntity = new BookEntity();
-        bookEntity.setId(book.getId());
-        bookEntity.setIsbn(book.getIsbn());
-        bookEntity.setAuthorFirstName(book.getAuthorFirstName());
-        bookEntity.setAuthorLastName(book.getAuthorLastName());
-        bookEntity.setTitle(book.getTitle());
-        bookEntity.setGenre(book.getGenre());
-        bookEntity.setCount(book.getCount());
+        BookEntity bookEntity = EntityUtil.transportToBookEntity(book);
 
         EntityManager em = EMUtil.getEntityManager();
         em.getTransaction().begin();
@@ -86,6 +80,7 @@ public class DefaultBookDao implements BookDao {
 
     @Override
     public Book getById(int id) {
+
         Book book = new Book();
         try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM book WHERE id=?")) {
@@ -131,5 +126,14 @@ public class DefaultBookDao implements BookDao {
             preparedStatement.setInt(1, book.getId());
         }
 
+    }
+
+    @Override
+    public boolean findById(int id) {
+        EntityManager em = EMUtil.getEntityManager();
+        if (em.find(BookEntity.class, id) != null) {
+            return true;
+        }
+        return false;
     }
 }

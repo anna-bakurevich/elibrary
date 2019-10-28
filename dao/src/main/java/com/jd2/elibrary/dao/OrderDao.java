@@ -18,4 +18,5 @@ public interface OrderDao {
     //delete
     void removeOrder(Order order);
 
+    boolean findById(int id);
 }

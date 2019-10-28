@@ -4,11 +4,12 @@ import java.time.LocalDate;
 
 public class Order {
     private int id;
-    private LocalDate ordersDate;
+    private int userId;
+    private LocalDate orderDate;
     private LocalDate returnDate;
 
-    public LocalDate getOrdersDate() {
-        return ordersDate;
+    public LocalDate getOrderDate() {
+        return orderDate;
     }
 
     public LocalDate getReturnDate() {
@@ -17,5 +18,9 @@ public class Order {
 
     public int getId() {
         return id;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 }

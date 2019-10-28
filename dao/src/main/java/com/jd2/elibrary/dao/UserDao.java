@@ -24,5 +24,5 @@ public interface UserDao {
 
     int getIdByLogin(String login);
 
-    boolean idIsExist(int id);
+    boolean findById(int id);
 }

@@ -4,6 +4,7 @@ import com.jd2.elibrary.dao.DataSource;
 import com.jd2.elibrary.dao.UserDao;
 import com.jd2.elibrary.dao.entity.UserEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
+import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
 
@@ -32,14 +33,7 @@ public class DefaultUserDao implements UserDao {
     @Override
     public int saveUser(User user) {
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(user.getId());
-        userEntity.setFirstName(user.getFirstName());
-        userEntity.setLastName(user.getLastName());
-        userEntity.setPhone(user.getPhone());
-        userEntity.setLogin(user.getLogin());
-        userEntity.setPassword(user.getPassword());
-        userEntity.setRole(user.getRole());
+        UserEntity userEntity = EntityUtil.transportToUserEntity(user);
 
         EntityManager em = EMUtil.getEntityManager();
         em.getTransaction().begin();
@@ -111,6 +105,28 @@ public class DefaultUserDao implements UserDao {
 //        } catch (SQLException e) {
 //            throw new RuntimeException(e);
 //        }
+    }
+
+    @Override
+    public boolean findById(int id) {
+        EntityManager em = EMUtil.getEntityManager();
+        if (em.find(UserEntity.class, id) != null) {
+            return true;
+        }
+        return false;
+        //        try (Connection connection = connect();
+//             PreparedStatement preparedStatement = connection.prepareStatement(
+//                     "SELECT * FROM user WHERE id = ?")) {
+//            preparedStatement.setInt(1, id);
+//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+//                if (resultSet.next()) {
+//                    return true;
+//                }
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return false;
     }
 
     @Override
@@ -186,27 +202,7 @@ public class DefaultUserDao implements UserDao {
         }
     }
 
-    @Override
-    public boolean idIsExist(int id) {
-        EntityManager em = EMUtil.getEntityManager();
-        if (em.find(UserEntity.class, id) != null) {
-           return true;
-        }
-        return false;
-//        try (Connection connection = connect();
-//             PreparedStatement preparedStatement = connection.prepareStatement(
-//                     "SELECT * FROM user WHERE id = ?")) {
-//            preparedStatement.setInt(1, id);
-//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-//                if (resultSet.next()) {
-//                    return true;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return false;
-    }
+
 
     @Override
     public int getIdByLogin(String login) {
@@ -224,4 +220,5 @@ public class DefaultUserDao implements UserDao {
         }
         return 0;
     }
+
 }

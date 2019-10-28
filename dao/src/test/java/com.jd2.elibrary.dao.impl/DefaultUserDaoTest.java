@@ -21,10 +21,10 @@ public class DefaultUserDaoTest {
         assertNotNull(dao.getUsers());
     }
 
-    @Test
-    void idIsExistTest() {
-        assertTrue(dao.idIsExist(1));
-    }
+//    @Test
+//    void idIsExistTest() {
+//        assertTrue(dao.idIsExist(1));
+//    }
 
     @Test
     void getIdByLoginTest() {

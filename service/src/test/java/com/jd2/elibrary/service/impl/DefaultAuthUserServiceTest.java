@@ -39,12 +39,12 @@ public class DefaultAuthUserServiceTest {
         assertNull(user1);
     }
 
-    @Test
-    void idIsExistTest(){
-        when(dao.idIsExist(1)).thenReturn(true);
-        User user = new User(1, null, null,null,null,null);
-        assertTrue(service.idIsExist(user.getId()));
-    }
+//    @Test
+//    void idIsExistTest(){
+//        when(dao.idIsExist(1)).thenReturn(true);
+//        User user = new User(1, null, null,null,null,null);
+//        assertTrue(service.idIsExist(user.getId()));
+//    }
 
     @Test
     void getIdByLoginTest(){
