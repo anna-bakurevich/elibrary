@@ -27,15 +27,21 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public boolean orderIsExist(int userId) {
-        //найти заказ по userID
-//        if (orderDao.findById(userId)) {
-//            return true;
-//        }
-       return false;
+        if (orderDao.findById(userId)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Order getOrderByUserId(int userId) {
+        return orderDao.getOrderByUserId(userId);
     }
 
     @Override
     public void saveOrder(Order order) {
         orderDao.saveOrder(order);
     }
+
+
 }

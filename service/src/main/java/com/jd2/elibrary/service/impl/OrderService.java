@@ -8,4 +8,5 @@ public interface OrderService {
     List<Order> getOrders();
     boolean orderIsExist(int userId);
     void saveOrder(Order order);
+    Order getOrderByUserId(int userId);
 }

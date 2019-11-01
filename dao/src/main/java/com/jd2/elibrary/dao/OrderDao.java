@@ -11,9 +11,10 @@ public interface OrderDao {
     //read
     List<Order> getOrders();
     Order getOrderById(int id);
+    Order getOrderByUserId(int userId);
 
     //update
-    void updateOrder(Order order);
+    void updateOrder(Order order, int bookId);
 
     //delete
     void removeOrder(Order order);

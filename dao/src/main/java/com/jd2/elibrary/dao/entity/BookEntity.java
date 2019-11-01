@@ -3,6 +3,8 @@ package com.jd2.elibrary.dao.entity;
 import com.jd2.elibrary.model.BookGenre;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "book")
@@ -23,6 +25,9 @@ public class BookEntity {
     private BookGenre genre;
     @Column(name = "count")
     private int count;
+
+    @OneToMany(mappedBy = "bookEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderSpecificationEntity> specification = new ArrayList<>();
 
     public BookEntity() {
     }

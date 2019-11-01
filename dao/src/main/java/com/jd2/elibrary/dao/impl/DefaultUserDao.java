@@ -7,13 +7,14 @@ import com.jd2.elibrary.dao.util.EMUtil;
 import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
+import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultUserDao implements UserDao {
@@ -33,33 +34,13 @@ public class DefaultUserDao implements UserDao {
     @Override
     public int saveUser(User user) {
 
-        UserEntity userEntity = EntityUtil.transportToUserEntity(user);
+        UserEntity userEntity = EntityUtil.convertToUserEntity(user);
 
         EntityManager em = EMUtil.getEntityManager();
         em.getTransaction().begin();
         em.persist(userEntity);
         em.getTransaction().commit();
         return userEntity.getId();
-
-//        try (Connection connection = connect();
-//             PreparedStatement preparedStatement = connection.prepareStatement(
-//                     "INSERT INTO user(first_name, last_name, phone, login, password, role) VALUES (?,?,?,?,?,?)",
-//                     Statement.RETURN_GENERATED_KEYS)) {
-//            preparedStatement.setString(1, user.getFirstName());
-//            preparedStatement.setString(2, user.getLastName());
-//            preparedStatement.setString(3, user.getPhone());
-//            preparedStatement.setString(4, user.getLogin());
-//            preparedStatement.setString(5, user.getPassword());
-//            preparedStatement.setString(6, Role.CUSTOMER.name());
-//            preparedStatement.executeUpdate();
-//            try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
-//                keys.next();
-//                user.setId(keys.getInt(1));
-//                return user.getId();
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     @Override
@@ -73,19 +54,7 @@ public class DefaultUserDao implements UserDao {
         userEntity.setLastName(user.getLastName());
         userEntity.setPhone(user.getPhone());
         em.getTransaction().commit();
-
-
-//        try (Connection connection = connect();
-//             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user SET first_name=?, " +
-//                     "last_name=?, phone=? WHERE id=?")) {
-//            preparedStatement.setString(1, user.getFirstName());
-//            preparedStatement.setString(2, user.getLastName());
-//            preparedStatement.setString(3, user.getPhone());
-//            preparedStatement.setInt(4, user.getId());
-//            preparedStatement.executeUpdate();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        em.close();
     }
 
     @Override
@@ -97,14 +66,7 @@ public class DefaultUserDao implements UserDao {
         UserEntity userEntity = em.find(UserEntity.class, id);
         em.remove(userEntity);
         em.getTransaction().commit();
-//
-//        try (Connection connection = connect();
-//             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM user WHERE id=?")) {
-//            preparedStatement.setInt(1, id);
-//            preparedStatement.executeUpdate();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        em.close();
     }
 
     @Override
@@ -114,41 +76,13 @@ public class DefaultUserDao implements UserDao {
             return true;
         }
         return false;
-        //        try (Connection connection = connect();
-//             PreparedStatement preparedStatement = connection.prepareStatement(
-//                     "SELECT * FROM user WHERE id = ?")) {
-//            preparedStatement.setInt(1, id);
-//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-//                if (resultSet.next()) {
-//                    return true;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return false;
     }
 
     @Override
     public List<User> getUsers() {
-        try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user");
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            final ArrayList<User> users = new ArrayList<>();
-            while (resultSet.next()) {
-                final User user = new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("phone"),
-                        resultSet.getString("login"),
-                        resultSet.getString("password"));
-                users.add(user);
-            }
-            return users;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Session session = EMUtil.getSession();
+        Query query = session.createQuery("from UserEntity" );
+                return query.getResultList();
     }
 
     @Override

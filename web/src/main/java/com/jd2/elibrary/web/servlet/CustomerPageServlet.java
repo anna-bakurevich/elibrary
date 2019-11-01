@@ -1,6 +1,7 @@
 package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.Book;
+import com.jd2.elibrary.model.Order;
 import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.AuthUserService;
 import com.jd2.elibrary.service.impl.BookService;
@@ -39,21 +40,30 @@ public class CustomerPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        int bookId = Integer.parseInt((req.getParameter("bookToOrder")));
-        int count = bookService.getById(bookId).getCount();
+        int bookToOrder = Integer.parseInt(req.getParameter("bookToOrder"));
+        int countToOrder = Integer.parseInt(req.getParameter("countToOrder"));
+        int count = bookService.getById(bookToOrder).getCount();
+
         User user = (User) req.getSession().getAttribute("login");
        if (count > 0) {
          if (orderService.orderIsExist(user.getId())) {
-                //добавить книгу в существующий заказ по bookId
+             //получаем существующий заказ
+             Order order = orderService.getOrderByUserId(user.getId());
+                //добавляем в него книгу по bookId (обновляем заказ)
+
             //иначе создать новый заказ и добавляем в него книгу
             } else {
-                orderService.saveOrder;
+             Order order = new Order();
+             order.setUserId(user.getId());
+             order.setOrderDate(null);
+             order.setReturnDate(null);
+                orderService.saveOrder(order);
             }
        } else {
            //вывести сообщение о недоступности книги для заказа
        }
 
-        log.info("order {} created", orderId);
+       // log.info("order {} created", orderId);
         redirectToJsp("/customerPage", req, resp);
     }
 }

@@ -11,6 +11,7 @@ public class DefaultBookService implements BookService {
     private BookDao bookDao = DefaultBookDao.getInstance();
 
     private static BookService instance;
+
     public static synchronized BookService getInstance() {
         if (instance == null) {
             instance = new DefaultBookService() {
@@ -32,5 +33,25 @@ public class DefaultBookService implements BookService {
     @Override
     public void saveBook(Book book) {
         bookDao.saveBook(book);
+    }
+
+    @Override
+    public void decreaseCountBook(int id, int count) {
+        //текущее кол-во
+        int oldCount = bookDao.getById(id).getCount();
+        //уменьшенное кол-во
+        int newCount = oldCount - count;
+        //устанавливаем уменьшенное кол-во
+        bookDao.updateCountBook(bookDao.getById(id), newCount);
+    }
+
+    @Override
+    public void increaseCountBook(int id, int count) {
+        //текущее кол-во
+        int oldCount = bookDao.getById(id).getCount();
+        //увеличенное кол-во
+        int newCount = oldCount + count;
+        //устанавливаем увеличенное кол-во
+        bookDao.updateCountBook(bookDao.getById(id), newCount);
     }
 }

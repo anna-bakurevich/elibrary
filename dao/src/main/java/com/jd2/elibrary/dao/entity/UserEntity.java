@@ -24,10 +24,14 @@ public class UserEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @OneToOne(mappedBy = "userEntity", fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private OrderEntity orderEntity;
+
+
     public UserEntity(){
 
     }
-
     public int getId() {
         return id;
     }
@@ -84,4 +88,7 @@ public class UserEntity {
         this.role = role;
     }
 
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
+    }
 }

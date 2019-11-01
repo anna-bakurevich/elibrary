@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
+import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
 
 @WebServlet(urlPatterns = "/editBookCatalogue")
 public class EditBookCatalogueServlet extends HttpServlet {
@@ -31,5 +32,19 @@ public class EditBookCatalogueServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        if (req.getParameter("bookDelete") != null) {
+            int bookDelete = Integer.parseInt(req.getParameter("bookDelete"));
+            int countDelete = Integer.parseInt(req.getParameter("countDelete"));
+            bookService.decreaseCountBook(bookDelete, countDelete);
+            log.info("book {} decreased by {}", bookDelete, countDelete);
+        }
+        if (req.getParameter("bookAdd") != null) {
+            int bookAdd = Integer.parseInt(req.getParameter("bookAdd"));
+            int countAdd = Integer.parseInt(req.getParameter("countAdd"));
+            bookService.increaseCountBook(bookAdd, countAdd);
+            log.info("book {} increased by {}", bookAdd, countAdd);
+        }
+        redirectToJsp("/editBookCatalogue", req, resp);
+//        forwardToJsp("librarianPage", req, resp);
     }
 }

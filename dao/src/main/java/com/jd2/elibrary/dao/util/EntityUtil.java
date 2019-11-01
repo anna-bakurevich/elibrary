@@ -8,7 +8,7 @@ import com.jd2.elibrary.model.Order;
 import com.jd2.elibrary.model.User;
 
 public class EntityUtil {
-    public static UserEntity transportToUserEntity (User user) {
+    public static UserEntity convertToUserEntity(User user) {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(user.getId());
         userEntity.setFirstName(user.getFirstName());
@@ -20,7 +20,7 @@ public class EntityUtil {
         return userEntity;
     }
 
-    public static BookEntity transportToBookEntity(Book book) {
+    public static BookEntity convertToBookEntity(Book book) {
         BookEntity bookEntity = new BookEntity();
         bookEntity.setId(book.getId());
         bookEntity.setIsbn(book.getIsbn());
@@ -32,13 +32,34 @@ public class EntityUtil {
         return bookEntity;
     }
 
-    public static OrderEntity transportToOrderEntity(Order order) {
+    public static Book convertToBook(BookEntity bookEntity) {
+        Book book = new Book();
+        book.setId(bookEntity.getId());
+        book.setIsbn(bookEntity.getIsbn());
+        book.setAuthorFirstName(bookEntity.getAuthorFirstName());
+        book.setAuthorLastName(bookEntity.getAuthorLastName());
+        book.setTitle(bookEntity.getTitle());
+        book.setGenre(bookEntity.getGenre());
+        book.setCount(bookEntity.getCount());
+        return book;
+    }
+
+    public static OrderEntity convertToOrderEntity(Order order) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(order.getId());
         orderEntity.setUserId(order.getUserId());
         orderEntity.setOrderDate(order.getOrderDate());
         orderEntity.setReturnDate(order.getReturnDate());
         return orderEntity;
+    }
+
+    public static Order convertToOrder(OrderEntity orderEntity) {
+        Order order = new Order();
+        order.setId(orderEntity.getId());
+        order.setOrderDate(orderEntity.getOrderDate());
+        order.setReturnDate(orderEntity.getReturnDate());
+        order.setUserId(orderEntity.getUserId());
+        return order;
     }
 
 }

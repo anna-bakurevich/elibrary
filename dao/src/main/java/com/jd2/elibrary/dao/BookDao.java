@@ -2,24 +2,21 @@ package com.jd2.elibrary.dao;
 
 import com.jd2.elibrary.model.Book;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface BookDao {
 
     //create
-    void saveBook(Book book) throws SQLException;
+    void saveBook(Book book);
 
     //read
     List<Book> getBooks();
 
-    Book getById(int id) throws SQLException;
+    Book getById(int id);
 
     //update
-    void updateBook(Book book) throws SQLException;
+    void updateCountBook(Book book, int count);
 
     //delete
-    void removeBook(Book book) throws SQLException;
-
-    boolean findById(int id);
+    void removeBook(int id);
 }

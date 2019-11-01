@@ -1,7 +1,11 @@
 package com.jd2.elibrary.dao.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders_list")
@@ -12,18 +16,39 @@ public class OrderEntity {
     @Column(name = "user_id")
     private int userId;
     @Column(name = "order_date")
+    @CreationTimestamp
     private LocalDate orderDate;
     @Column(name = "return_date")
+    @CreationTimestamp
     private LocalDate returnDate;
+
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private UserEntity userEntity;
+
+    @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderSpecificationEntity> specification = new ArrayList<>();
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 
     public OrderEntity() {
 
     }
 
-    public OrderEntity(int userId, LocalDate orderDate, LocalDate returnDate) {
+    public OrderEntity(int userId, LocalDate orderDate, LocalDate returnDate, UserEntity userEntity,
+                       List<OrderSpecificationEntity> specification) {
         this.userId = userId;
         this.orderDate = orderDate;
         this.returnDate = returnDate;
+        this.userEntity = userEntity;
+        this.specification = specification;
     }
 
     public int getId() {
@@ -56,5 +81,14 @@ public class OrderEntity {
 
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+
+    public List<OrderSpecificationEntity> getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(List<OrderSpecificationEntity> specification) {
+        this.specification = specification;
     }
 }

@@ -33,12 +33,12 @@
                 <td>${book.authorLastName}</td>
                 <td>${book.title}</td>
                 <td>${book.genre}</td>
-                <td>${book.count}</td>
+                <td align = "center">${book.count}</td>
                 <td>
                     <form method="post" action="${pageContext.request.contextPath}/privatePage">
                         <input name="bookToOrder" type="hidden" value="${book.id}">
                         <input type="submit" value=<fmt:message key="order" bundle="${messages}"/>>
-                        <input name="countToOrder" type="number" value=0 style="width: 40px">
+                        <input name="countToOrder" type="number" min=0 max=1 value=0 style="width: 40px">
                     </form>
                 </td>
             </tr>

@@ -26,21 +26,22 @@
             <td>${book.authorLastName}</td>
             <td>${book.title}</td>
             <td>${book.genre}</td>
-            <td>${book.count}</td>
+            <td align = "center">${book.count}</td>
             <td>
-                <form method="post" action="${pageContext.request.contextPath}/privatePage">
+                <form method="post" action="${pageContext.request.contextPath}/editBookCatalogue">
                     <input name="bookDelete" type="hidden" value="${book.id}">
                     <input type="submit" style="height: 22px; width: 75px;"
                             value=<fmt:message key="delete" bundle="${messages}"/>>
-                    <input type="number" value=0 style="width: 40px">
+                    <input name="countDelete" type="number" value=0 min=0 style="width: 40px">
                 </form>
-                <form method="post" action="${pageContext.request.contextPath}/privatePage">
+                <form method="post" action="${pageContext.request.contextPath}/editBookCatalogue">
                     <input name="bookAdd" type="hidden" value="${book.id}">
                     <input type="submit" style="height: 22px; width: 75px;"
                             value=<fmt:message key="add" bundle="${messages}"/>>
-                    <input type="number" value=0 style="width: 40px">
+                    <input name="countAdd" type="number" value=0 min=0 style="width: 40px">
                 </form>
             </td>
         </tr>
     </c:forEach>
 </table>
+<a href="<c:url value="/librarianPage"/>"><fmt:message key="return.private" bundle="${messages}"/></a>
