@@ -51,7 +51,10 @@ public class DefaultBookDao implements BookDao {
     public Book getById(int id) {
         EntityManager em = EMUtil.getEntityManager();
         BookEntity bookEntity = em.find(BookEntity.class, id);
-        return EntityUtil.convertToBook(bookEntity);
+        if(bookEntity != null) {
+            return EntityUtil.convertToBook(bookEntity);
+        }
+        return null;
 
     }
 

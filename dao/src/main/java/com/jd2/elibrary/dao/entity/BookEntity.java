@@ -27,8 +27,7 @@ public class BookEntity {
     public BookEntity() {
     }
 
-    public BookEntity(int id, String isbn, String authorFirstName, String authorLastName, String title, BookGenre genre, int count) {
-        this.id = id;
+    public BookEntity(String isbn, String authorFirstName, String authorLastName, String title, BookGenre genre, int count) {
         this.isbn = isbn;
         this.authorFirstName = authorFirstName;
         this.authorLastName = authorLastName;
