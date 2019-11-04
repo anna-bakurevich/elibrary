@@ -1,5 +1,6 @@
 package com.jd2.elibrary.dao.entity;
 
+import com.jd2.elibrary.model.OrderStatus;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,42 +14,36 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "user_id")
-    private int userId;
     @Column(name = "order_date")
     @CreationTimestamp
     private LocalDate orderDate;
     @Column(name = "return_date")
     @CreationTimestamp
     private LocalDate returnDate;
+    @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
+    private OrderStatus orderStatus;
 
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderSpecificationEntity> specification = new ArrayList<>();
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
+    @OneToMany
+    @JoinTable(name = "order_book",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<BookEntity> booksInOrder = new ArrayList<>();
 
     public OrderEntity() {
-
     }
 
-    public OrderEntity(int userId, LocalDate orderDate, LocalDate returnDate, UserEntity userEntity,
-                       List<OrderSpecificationEntity> specification) {
-        this.userId = userId;
+    public OrderEntity(LocalDate orderDate, LocalDate returnDate, OrderStatus orderStatus,
+                       UserEntity userEntity, List<BookEntity> booksInOrder) {
         this.orderDate = orderDate;
         this.returnDate = returnDate;
+        this.orderStatus = orderStatus;
         this.userEntity = userEntity;
-        this.specification = specification;
+        this.booksInOrder = booksInOrder;
     }
 
     public int getId() {
@@ -57,14 +52,6 @@ public class OrderEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public LocalDate getOrderDate() {
@@ -83,12 +70,27 @@ public class OrderEntity {
         this.returnDate = returnDate;
     }
 
-
-    public List<OrderSpecificationEntity> getSpecification() {
-        return specification;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setSpecification(List<OrderSpecificationEntity> specification) {
-        this.specification = specification;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public List<BookEntity> getBooksInOrder() {
+        return booksInOrder;
+    }
+
+    public void setBooksInOrder(List<BookEntity> booksInOrder) {
+        this.booksInOrder = booksInOrder;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

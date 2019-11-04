@@ -35,7 +35,7 @@
                 <td>${book.genre}</td>
                 <td align = "center">${book.count}</td>
                 <td>
-                    <form method="post" action="${pageContext.request.contextPath}/privatePage">
+                    <form method="post" action="${pageContext.request.contextPath}/customerPage">
                         <input name="bookToOrder" type="hidden" value="${book.id}">
                         <input type="submit" value=<fmt:message key="order" bundle="${messages}"/>>
                         <input name="countToOrder" type="number" min=0 max=1 value=0 style="width: 40px">

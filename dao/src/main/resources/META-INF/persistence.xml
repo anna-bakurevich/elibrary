@@ -7,7 +7,6 @@
         <class>com.jd2.elibrary.dao.entity.UserEntity</class>
         <class>com.jd2.elibrary.dao.entity.BookEntity</class>
         <class>com.jd2.elibrary.dao.entity.OrderEntity</class>
-        <class>com.jd2.elibrary.dao.entity.OrderSpecificationEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
@@ -17,8 +16,8 @@
             <property name="javax.persistence.jdbc.password" value="Bakure1974!"/>
             <property name="hibernate.dialect.storage_engine" value="innodb"/>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
-<!--            <property name="hibernate.use_sql_comments" value="true"/>-->
-<!--            <property name="hibernate.show_sql" value="true"/>-->
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.connection.pool_size" value="10"/>
         </properties>
     </persistence-unit>

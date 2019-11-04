@@ -3,6 +3,8 @@ package com.jd2.elibrary.dao.entity;
 import com.jd2.elibrary.model.Role;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -24,14 +26,25 @@ public class UserEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "userEntity", fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private OrderEntity orderEntity;
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderEntity> orders = new ArrayList<>();
 
 
     public UserEntity(){
 
     }
+
+    public UserEntity(String firstName, String lastName, String phone, String login, String password,
+                      Role role, List<OrderEntity> orders) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+        this.orders = orders;
+    }
+
     public int getId() {
         return id;
     }
@@ -88,7 +101,11 @@ public class UserEntity {
         this.role = role;
     }
 
-    public OrderEntity getOrderEntity() {
-        return orderEntity;
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 }
