@@ -31,10 +31,14 @@ public class CustomerPageServlet extends HttpServlet {
     private AuthUserService authUserService = DefaultAuthUserService.getInstance();
     private BookService bookService = DefaultBookService.getInstance();
     private OrderService orderService = DefaultOrderService.getInstance();
+    private int pageNumber = 1;
+    private int pageSize = 2;
+
+    //добавить пейджинацию аналогично EditBookServlet
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Book> books = bookService.getBooks();
+        List<Book> books = bookService.getBooks(pageNumber, pageSize);
         req.setAttribute("books", books);
         forwardToJsp("customerPage", req, resp);
     }

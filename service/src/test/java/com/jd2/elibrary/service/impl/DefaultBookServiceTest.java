@@ -27,10 +27,11 @@ class DefaultBookServiceTest {
 
     @Test
     void getBooksTest() {
-        when(dao.getBooks()).thenReturn(new ArrayList<Book>());
-        List<Book> books = service.getBooks();
+        when(dao.getBooks(1, 2)).thenReturn(new ArrayList<Book>());
+        List<Book> books = service.getBooks(1,2);
         assertNotNull(books);
     }
+
 
     @Test
     void getByIdTest() {

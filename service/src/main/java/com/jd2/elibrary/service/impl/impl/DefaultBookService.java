@@ -21,8 +21,8 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public List<Book> getBooks() {
-        return bookDao.getBooks();
+    public List<Book> getBooks(int pageNumber, int pageSize) {
+        return bookDao.getBooks(pageNumber, pageSize);
     }
 
 
@@ -54,5 +54,11 @@ public class DefaultBookService implements BookService {
         int newCount = oldCount + count;
         //устанавливаем увеличенное кол-во
         bookDao.updateCountBook(bookDao.getById(id), newCount);
+    }
+
+    @Override
+    public int countPageBooks(int pageSize) {
+        List<Book> books = bookDao.getAllBooks();
+        return books.size() / pageSize + 1;
     }
 }

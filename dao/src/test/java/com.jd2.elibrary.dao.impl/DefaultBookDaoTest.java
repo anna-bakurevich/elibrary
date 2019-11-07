@@ -26,7 +26,7 @@ public class DefaultBookDaoTest {
 
     @Test
     void getBooksTest() {
-        assertNotNull(dao.getBooks());
+        assertNotNull(dao.getBooks(1, 2));
     }
 
     @Test

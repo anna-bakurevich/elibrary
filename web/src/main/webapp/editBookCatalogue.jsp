@@ -26,22 +26,38 @@
             <td>${book.authorLastName}</td>
             <td>${book.title}</td>
             <td>${book.genre}</td>
-            <td align = "center">${book.count}</td>
+            <td align="center">${book.count}</td>
             <td>
                 <form method="post" action="${pageContext.request.contextPath}/editBookCatalogue">
                     <input name="bookDelete" type="hidden" value="${book.id}">
                     <input type="submit" style="height: 22px; width: 75px;"
-                            value=<fmt:message key="delete" bundle="${messages}"/>>
+                           value=<fmt:message key="delete" bundle="${messages}"/>>
                     <input name="countDelete" type="number" value=0 min=0 style="width: 40px">
                 </form>
                 <form method="post" action="${pageContext.request.contextPath}/editBookCatalogue">
                     <input name="bookAdd" type="hidden" value="${book.id}">
                     <input type="submit" style="height: 22px; width: 75px;"
-                            value=<fmt:message key="add" bundle="${messages}"/>>
+                           value=<fmt:message key="add" bundle="${messages}"/>>
                     <input name="countAdd" type="number" value=0 min=0 style="width: 40px">
                 </form>
             </td>
         </tr>
     </c:forEach>
 </table>
+
+<form method="post" action="${pageContext.request.contextPath}/editBookCatalogue">
+    <input name="pageNumber" type="hidden" value="${pageNumber}">
+
+    <c:if test="${pageNumber>1}">
+        <input name="prevPage" type="submit" value=<fmt:message key="button.prev" bundle="${messages}"/>>
+    </c:if>
+
+    <c:if test="${pageNumber<maxNumber}">
+        <input name="nextPage" type="submit" value=<fmt:message key="button.next" bundle="${messages}"/>>
+    </c:if>
+
+</form>
+
+<br>
+<br>
 <a href="<c:url value="/librarianPage"/>"><fmt:message key="return.private" bundle="${messages}"/></a>

@@ -21,17 +21,33 @@ import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
 public class EditBookCatalogueServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(CustomerPageServlet.class);
     private BookService bookService = DefaultBookService.getInstance();
+    private int pageNumber = 1;
+    private int pageSize = 2;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Book> books = bookService.getBooks();
+        List<Book> books = bookService.getBooks(pageNumber, pageSize);
+        int maxNumber = bookService.countPageBooks(pageSize);
         req.setAttribute("books", books);
+        req.setAttribute("maxNumber", maxNumber);
+        req.setAttribute("pageNumber", pageNumber);
         forwardToJsp("editBookCatalogue", req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        if (req.getParameter("nextPage") != null) {
+            pageNumber++;
+            req.setAttribute("pageNumber", pageNumber);
+            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            req.setAttribute("books", books);
+        }
+        if (req.getParameter("prevPage") != null) {
+            pageNumber--;
+            req.setAttribute("pageNumber", pageNumber);
+            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            req.setAttribute("books", books);
+        }
         if (req.getParameter("bookDelete") != null) {
             int bookDelete = Integer.parseInt(req.getParameter("bookDelete"));
             int countDelete = Integer.parseInt(req.getParameter("countDelete"));
@@ -45,6 +61,5 @@ public class EditBookCatalogueServlet extends HttpServlet {
             log.info("book {} increased by {}", bookAdd, countAdd);
         }
         redirectToJsp("/editBookCatalogue", req, resp);
-//        forwardToJsp("librarianPage", req, resp);
     }
 }

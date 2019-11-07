@@ -9,6 +9,9 @@ import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 public class DefaultBookDao implements BookDao {
@@ -33,8 +36,24 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public List<Book> getBooks() {
-       final Session session = EMUtil.getSession();
+    public List<Book> getBooks(int pageNumber, int pageSize) {
+        final EntityManager em = EMUtil.getEntityManager();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<BookEntity> criteria = cb.createQuery(BookEntity.class);
+        criteria.from(BookEntity.class);
+        TypedQuery<BookEntity> typedQuery = em.createQuery(criteria);
+        typedQuery.setFirstResult(pageSize*(pageNumber - 1));
+        typedQuery.setMaxResults(pageSize);
+        List<BookEntity> books = typedQuery.getResultList();
+
+        return EntityUtil.convertListToBook(books);
+
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        final Session session = EMUtil.getSession();
         Query query = session.createQuery("from BookEntity");
         return query.getResultList();
     }

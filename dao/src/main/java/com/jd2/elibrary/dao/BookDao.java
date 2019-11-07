@@ -10,7 +10,8 @@ public interface BookDao {
     void saveBook(Book book);
 
     //read
-    List<Book> getBooks();
+    List<Book> getBooks(int pageNumber, int pageSize);
+    List<Book> getAllBooks();
 
     Book getById(int id);
     boolean findBookByIsbn(String isbn);
