@@ -55,7 +55,6 @@
     <c:if test="${pageNumber<maxNumber}">
         <input name="nextPage" type="submit" value=<fmt:message key="button.next" bundle="${messages}"/>>
     </c:if>
-
 </form>
 
 <br>

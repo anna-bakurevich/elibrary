@@ -34,40 +34,56 @@ public class CustomerPageServlet extends HttpServlet {
     private int pageNumber = 1;
     private int pageSize = 2;
 
-    //добавить пейджинацию аналогично EditBookServlet
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Book> books = bookService.getBooks(pageNumber, pageSize);
+        int maxNumber = bookService.countPageBooks(pageSize);
         req.setAttribute("books", books);
+        req.setAttribute("maxNumber", maxNumber);
+        req.setAttribute("pageNumber", pageNumber);
         forwardToJsp("customerPage", req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        int bookToOrder = Integer.parseInt(req.getParameter("bookToOrder"));
-        int countToOrder = Integer.parseInt(req.getParameter("countToOrder"));
-        int count = bookService.getById(bookToOrder).getCount();
-        User user = (User) req.getSession().getAttribute("login");
-        //пытаемся получить оформляющийся заказ
-        Order orderFilled = orderService.getOrderFilledByUserId(user.getId());
+        if (req.getParameter("nextPage") != null) {
+            pageNumber++;
+            req.setAttribute("pageNumber", pageNumber);
+            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            req.setAttribute("books", books);
+        }
+        if (req.getParameter("prevPage") != null) {
+            pageNumber--;
+            req.setAttribute("pageNumber", pageNumber);
+            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            req.setAttribute("books", books);
+        }
 
-        if (count > 0) {
-            if (orderFilled != null) {
-                //добавляем в него книгу по bookId (обновляем заказ)
-                orderService.updateOrder(orderFilled, bookToOrder);
-                //иначе создаем новый заказ и добавляем в него книгу
+        if (req.getParameter("bookToOrder") != null) {
+            int bookToOrder = Integer.parseInt(req.getParameter("bookToOrder"));
+            int countToOrder = Integer.parseInt(req.getParameter("countToOrder"));
+            int count = bookService.getById(bookToOrder).getCount();
+            User user = (User) req.getSession().getAttribute("login");
+            //пытаемся получить оформляющийся заказ
+            Order orderFilled = orderService.getOrderFilledByUserId(user.getId());
+
+            if (count > 0) {
+                if (orderFilled != null) {
+                    //добавляем в него книгу по bookId (обновляем заказ)
+                    orderService.updateOrder(orderFilled, bookToOrder);
+                    //иначе создаем новый заказ и добавляем в него книгу
+                } else {
+                    orderFilled = new Order();
+                    orderFilled.setUser(user);
+                    orderFilled.setOrderDate(LocalDate.now());
+                    orderFilled.setReturnDate(LocalDate.now().plusDays(30));
+                    orderFilled.setOrderStatus(OrderStatus.FILLED);
+                    orderService.saveOrder(orderFilled);
+                }
             } else {
-                orderFilled = new Order();
-                orderFilled.setUser(user);
-                orderFilled.setOrderDate(LocalDate.now());
-                orderFilled.setReturnDate(LocalDate.now().plusDays(30));
-                orderFilled.setOrderStatus(OrderStatus.FILLED);
-                orderService.saveOrder(orderFilled);
+                //вывести сообщение о недоступности книги для заказа
             }
-        } else {
-            //вывести сообщение о недоступности книги для заказа
         }
 
         // log.info("order {} created", orderId);

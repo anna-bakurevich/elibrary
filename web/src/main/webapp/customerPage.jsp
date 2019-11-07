@@ -45,3 +45,15 @@
         </c:if>
     </c:forEach>
 </table>
+
+<form method="post" action="${pageContext.request.contextPath}/customerPage">
+    <input name="pageNumber" type="hidden" value="${pageNumber}">
+
+    <c:if test="${pageNumber>1}">
+        <input name="prevPage" type="submit" value=<fmt:message key="button.prev" bundle="${messages}"/>>
+    </c:if>
+
+    <c:if test="${pageNumber<maxNumber}">
+        <input name="nextPage" type="submit" value=<fmt:message key="button.next" bundle="${messages}"/>>
+    </c:if>
+</form>
