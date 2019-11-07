@@ -1,20 +1,14 @@
 package com.jd2.elibrary.dao.impl;
 
-import com.jd2.elibrary.dao.DataSource;
 import com.jd2.elibrary.dao.UserDao;
 import com.jd2.elibrary.dao.entity.UserEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
 import com.jd2.elibrary.dao.util.EntityUtil;
-import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
 import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class DefaultUserDao implements UserDao {
@@ -27,16 +21,12 @@ public class DefaultUserDao implements UserDao {
         return instance;
     }
 
-    private Connection connect() {
-        return DataSource.getInstance().getConnection();
-    }
-
     @Override
     public int saveUser(User user) {
 
         UserEntity userEntity = EntityUtil.convertToUserEntity(user);
 
-        EntityManager em = EMUtil.getEntityManager();
+        final EntityManager em = EMUtil.getEntityManager();
         em.getTransaction().begin();
         em.persist(userEntity);
         em.getTransaction().commit();
@@ -46,7 +36,7 @@ public class DefaultUserDao implements UserDao {
     @Override
     public void updateUser(User user) {
 
-        EntityManager em = EMUtil.getEntityManager();
+        final EntityManager em = EMUtil.getEntityManager();
 
         em.getTransaction().begin();
         UserEntity userEntity = em.find(UserEntity.class, user.getId());
@@ -54,24 +44,22 @@ public class DefaultUserDao implements UserDao {
         userEntity.setLastName(user.getLastName());
         userEntity.setPhone(user.getPhone());
         em.getTransaction().commit();
-        em.close();
     }
 
     @Override
     public void removeUser(int id) {
 
-        EntityManager em = EMUtil.getEntityManager();
+        final EntityManager em = EMUtil.getEntityManager();
 
         em.getTransaction().begin();
         UserEntity userEntity = em.find(UserEntity.class, id);
         em.remove(userEntity);
         em.getTransaction().commit();
-        em.close();
     }
 
     @Override
     public boolean findById(int id) {
-        EntityManager em = EMUtil.getEntityManager();
+        final EntityManager em = EMUtil.getEntityManager();
         if (em.find(UserEntity.class, id) != null) {
             return true;
         }
@@ -80,79 +68,40 @@ public class DefaultUserDao implements UserDao {
 
     @Override
     public List<User> getUsers() {
-        Session session = EMUtil.getSession();
-        Query query = session.createQuery("from UserEntity" );
-                return query.getResultList();
+        final Session session = EMUtil.getSession();
+        Query query = session.createQuery("from UserEntity");
+        return query.getResultList();
     }
 
     @Override
     public User getByLogin(String login) {
-        try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM user WHERE login = ?")) {
-            preparedStatement.setString(1, login);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new User(
-                            resultSet.getInt("id"),
-                            resultSet.getString("first_name"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("phone"),
-                            resultSet.getString("login"),
-                            resultSet.getString("password"),
-                            Role.valueOf(resultSet.getString("role")
-                            ));
-                } else {
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        final Session session = EMUtil.getSession();
+        Query query = session.createQuery("from UserEntity ue where ue.login = :login");
+        UserEntity userEntity = (UserEntity) query.setParameter("login", login)
+                .getSingleResult();
+        if (userEntity != null) {
+            return EntityUtil.convertToUser(userEntity);
         }
+        return null;
     }
+
 
     @Override
     public User getById(int id) {
-        try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM user WHERE id = ?")) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new User(
-                            resultSet.getInt("id"),
-                            resultSet.getString("first_name"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("phone"),
-                            resultSet.getString("login"),
-                            resultSet.getString("password"),
-                            Role.valueOf(resultSet.getString("role")
-                            ));
-                } else {
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        final Session session = EMUtil.getSession();
+        session.getTransaction().begin();
+        UserEntity userEntity = session.find(UserEntity.class, id);
+        session.getTransaction().commit();
+        return EntityUtil.convertToUser(userEntity);
     }
-
 
 
     @Override
     public int getIdByLogin(String login) {
-        try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM user WHERE login = ?")) {
-            preparedStatement.setString(1, login);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt("id");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return 0;
+        final Session session = EMUtil.getSession();
+        Query query = session.createQuery("from UserEntity ue where ue.login = :login");
+        UserEntity userEntity = (UserEntity) query.setParameter("login", login)
+                .getSingleResult();
+                   return userEntity.getId();
     }
-
 }

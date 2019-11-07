@@ -13,6 +13,7 @@ public interface BookDao {
     List<Book> getBooks();
 
     Book getById(int id);
+    boolean findBookByIsbn(String isbn);
 
     //update
     void updateCountBook(Book book, int count);

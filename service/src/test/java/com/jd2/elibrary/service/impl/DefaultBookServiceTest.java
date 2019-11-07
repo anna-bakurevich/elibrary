@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,8 +27,24 @@ class DefaultBookServiceTest {
 
     @Test
     void getBooksTest() {
-       when(dao.getBooks()).thenReturn(new ArrayList<Book>());
+        when(dao.getBooks()).thenReturn(new ArrayList<Book>());
         List<Book> books = service.getBooks();
         assertNotNull(books);
+    }
+
+    @Test
+    void getByIdTest() {
+        Book book = new Book();
+        book.setId(1);
+        when(dao.getById(1)).thenReturn(book);
+        assertNotNull(service.getById(1));
+        assertNull(service.getById(100));
+    }
+
+    @Test
+    void saveBookTest() {
+        Book book = new Book();
+        service.saveBook(book);
+        verify(dao).saveBook(book);
     }
 }
