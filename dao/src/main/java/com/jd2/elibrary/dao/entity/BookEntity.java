@@ -1,11 +1,14 @@
 package com.jd2.elibrary.dao.entity;
 
 import com.jd2.elibrary.model.BookGenre;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "book")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
