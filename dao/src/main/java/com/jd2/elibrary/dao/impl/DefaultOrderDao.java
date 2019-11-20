@@ -1,10 +1,11 @@
 package com.jd2.elibrary.dao.impl;
 
 import com.jd2.elibrary.dao.OrderDao;
+import com.jd2.elibrary.dao.converter.BookConverter;
+import com.jd2.elibrary.dao.converter.OrderConverter;
 import com.jd2.elibrary.dao.entity.BookEntity;
 import com.jd2.elibrary.dao.entity.OrderEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
-import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
 import org.hibernate.Session;
@@ -31,7 +32,7 @@ public class DefaultOrderDao implements OrderDao {
 
     @Override
     public void saveOrder(Order order) {
-        OrderEntity orderEntity = EntityUtil.convertToOrderEntity(order);
+        OrderEntity orderEntity = OrderConverter.convertToOrderEntity(order);
 
         EntityManager em = EMUtil.getEntityManager();
         em.getTransaction().begin();
@@ -48,14 +49,14 @@ public class DefaultOrderDao implements OrderDao {
     public Order getOrderById(int id) {
         EntityManager em = EMUtil.getEntityManager();
         OrderEntity orderEntity = em.find(OrderEntity.class, id);
-        return EntityUtil.convertToOrder(orderEntity);
+        return OrderConverter.convertToOrder(orderEntity);
     }
 
     @Override
     public List<Book> getBooksByOrderId(int orderId) {
-        OrderEntity orderEntity = EntityUtil.convertToOrderEntity(getOrderById(orderId));
+        OrderEntity orderEntity = OrderConverter.convertToOrderEntity(getOrderById(orderId));
         List<BookEntity> booksEntity = orderEntity.getBooksInOrder();
-        List<Book> books = EntityUtil.convertListToBook(booksEntity);
+        List<Book> books = BookConverter.convertListToBook(booksEntity);
         return books;
     }
 
@@ -81,7 +82,7 @@ public class DefaultOrderDao implements OrderDao {
 
         List<OrderEntity> orders = em.createQuery(criteria).getResultList();
         if (orders != null) {
-            Order orderFilled = EntityUtil.convertToOrder(orders.get(0));
+            Order orderFilled = OrderConverter.convertToOrder(orders.get(0));
             return orderFilled;
         }
         return null;

@@ -1,9 +1,9 @@
 package com.jd2.elibrary.dao.impl;
 
 import com.jd2.elibrary.dao.BookDao;
+import com.jd2.elibrary.dao.converter.BookConverter;
 import com.jd2.elibrary.dao.entity.BookEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
-import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Book;
 import org.hibernate.Session;
 
@@ -27,7 +27,7 @@ public class DefaultBookDao implements BookDao {
 
     @Override
     public void saveBook(Book book) {
-        BookEntity bookEntity = EntityUtil.convertToBookEntity(book);
+        BookEntity bookEntity = BookConverter.convertToBookEntity(book);
 
         EntityManager em = EMUtil.getEntityManager();
         em.getTransaction().begin();
@@ -47,7 +47,7 @@ public class DefaultBookDao implements BookDao {
         typedQuery.setMaxResults(pageSize);
         List<BookEntity> books = typedQuery.getResultList();
 
-        return EntityUtil.convertListToBook(books);
+        return BookConverter.convertListToBook(books);
 
     }
 
@@ -63,7 +63,7 @@ public class DefaultBookDao implements BookDao {
         final EntityManager em = EMUtil.getEntityManager();
         BookEntity bookEntity = em.find(BookEntity.class, id);
         if(bookEntity != null) {
-            return EntityUtil.convertToBook(bookEntity);
+            return BookConverter.convertToBook(bookEntity);
         }
         return null;
 

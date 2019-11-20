@@ -11,6 +11,7 @@ public class WebUtils {
             throws ServletException, IOException {
         request.getRequestDispatcher("/" + page + ".jsp").forward(request, response);
     }
+
     public static void redirectToJsp(String page, HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect(request.getContextPath() + page);

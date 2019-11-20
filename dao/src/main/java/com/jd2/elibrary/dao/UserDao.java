@@ -10,7 +10,10 @@ public interface UserDao {
 
     //read
     List<User> getUsers();
-
+    User getByLogin(String login);
+    User getById(int id);
+    int getIdByLogin(String login);
+    boolean findById(int id);
 
     //update
     void updateUser(User user);
@@ -18,11 +21,5 @@ public interface UserDao {
     //delete
     void removeUser(int id);
 
-    User getByLogin(String login);
 
-    User getById(int id);
-
-    int getIdByLogin(String login);
-
-    boolean findById(int id);
 }

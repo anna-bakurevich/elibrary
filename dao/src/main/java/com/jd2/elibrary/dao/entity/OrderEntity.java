@@ -1,7 +1,6 @@
 package com.jd2.elibrary.dao.entity;
 
 import com.jd2.elibrary.model.OrderStatus;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,10 +14,10 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "order_date")
-    @CreationTimestamp
+
     private LocalDate orderDate;
     @Column(name = "return_date")
-    @CreationTimestamp
+
     private LocalDate returnDate;
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)

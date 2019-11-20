@@ -1,8 +1,8 @@
 package com.jd2.elibrary.dao.impl;
 
+import com.jd2.elibrary.dao.converter.UserConverter;
 import com.jd2.elibrary.dao.entity.UserEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
-import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
 import org.hibernate.Session;
@@ -31,7 +31,7 @@ public class DefaultUserDaoTest {
     @Test
     void saveUserTest() {
         UserEntity userEntity = userEntityForTest();
-        User user = EntityUtil.convertToUser(userEntity);
+        User user = UserConverter.convertToUser(userEntity);
 
         final int id = dao.saveUser(user);
 

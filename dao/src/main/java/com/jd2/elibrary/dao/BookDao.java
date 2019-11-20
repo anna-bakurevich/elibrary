@@ -12,7 +12,6 @@ public interface BookDao {
     //read
     List<Book> getBooks(int pageNumber, int pageSize);
     List<Book> getAllBooks();
-
     Book getById(int id);
     boolean findBookByIsbn(String isbn);
 

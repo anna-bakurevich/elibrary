@@ -1,10 +1,10 @@
 package com.jd2.elibrary.dao.impl;
 
+import com.jd2.elibrary.dao.converter.OrderConverter;
 import com.jd2.elibrary.dao.entity.BookEntity;
 import com.jd2.elibrary.dao.entity.OrderEntity;
 import com.jd2.elibrary.dao.entity.UserEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
-import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Order;
 import com.jd2.elibrary.model.OrderStatus;
 import org.hibernate.Session;
@@ -37,7 +37,7 @@ public class DefaultOrderDaoTest {
     @Test
     void saveOrderTest() {
         OrderEntity orderEntity = orderEntityForTest();
-        Order order = EntityUtil.convertToOrder(orderEntity);
+        Order order = OrderConverter.convertToOrder(orderEntity);
 
         dao.saveOrder(order);
 

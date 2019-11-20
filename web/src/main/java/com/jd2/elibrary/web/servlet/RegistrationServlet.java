@@ -36,7 +36,6 @@ public class RegistrationServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         //если пользователя нет в базе, добавляем его
-
         if (!authUserService.loginIsExist(login)) {
             User user = new User();
             user.setFirstName(firstName);
@@ -48,7 +47,7 @@ public class RegistrationServlet extends HttpServlet {
             authUserService.saveUser(user);
             log.info("user {} registered", login);
             req.getSession().setAttribute("login", user);
-            redirectToJsp("/privatePage", req, resp);
+            redirectToJsp("/customerPage", req, resp);
         } else {
             req.setAttribute("error", true);
             log.info("user is not registered");

@@ -11,13 +11,11 @@ public interface OrderDao {
 
     //read
     List<Order> getOrders();
-
     Order getOrderById(int id);
     List<Book> getBooksByOrderId(int orderId);
-
     List<Order> getOrdersByUserId(int userId);
-
     Order getOrderFilledByUserId(int userId);
+    boolean findById(int id);
 
     //update
     void updateOrder(Order order, int bookId);
@@ -25,5 +23,5 @@ public interface OrderDao {
     //delete
     void removeOrder(Order order);
 
-    boolean findById(int id);
+
 }

@@ -36,12 +36,15 @@ public class EditBookCatalogueServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
         if (req.getParameter("nextPage") != null) {
             pageNumber++;
             req.setAttribute("pageNumber", pageNumber);
             List<Book> books = bookService.getBooks(pageNumber, pageSize);
             req.setAttribute("books", books);
         }
+
         if (req.getParameter("prevPage") != null) {
             pageNumber--;
             req.setAttribute("pageNumber", pageNumber);

@@ -1,8 +1,8 @@
 package com.jd2.elibrary.dao.impl;
 
+import com.jd2.elibrary.dao.converter.BookConverter;
 import com.jd2.elibrary.dao.entity.BookEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
-import com.jd2.elibrary.dao.util.EntityUtil;
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.BookGenre;
 import org.hibernate.Session;
@@ -54,7 +54,7 @@ public class DefaultBookDaoTest {
         session.save(bookEntity);
         session.getTransaction().commit();
 
-        Book book = EntityUtil.convertToBook(bookEntity);
+        Book book = BookConverter.convertToBook(bookEntity);
         dao.updateCountBook(book, 5);
         assertEquals(5, dao.getById(book.getId()).getCount());
 
