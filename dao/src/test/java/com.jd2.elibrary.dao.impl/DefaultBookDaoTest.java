@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DefaultBookDaoTest {
-    DefaultBookDao dao = DefaultBookDao.getInstance();
+    DefaultBookDao dao = new DefaultBookDao();
 
     public BookEntity bookEntityForTest() {
         BookEntity bookEntity = new BookEntity();

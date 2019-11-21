@@ -2,41 +2,39 @@ package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.service.impl.BookService;
-import com.jd2.elibrary.service.impl.impl.DefaultBookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
-import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
-import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
-
-@WebServlet(urlPatterns = "/editBookCatalogue")
-public class EditBookCatalogueServlet extends HttpServlet {
+@Controller
+@RequestMapping
+public class EditBookCatalogueServlet {
     private static final Logger log = LoggerFactory.getLogger(CustomerPageServlet.class);
-    private BookService bookService = DefaultBookService.getInstance();
+    @Autowired
+    private BookService bookService;
+
     private int pageNumber = 1;
     private int pageSize = 2;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @GetMapping("/editBookCatalogue")
+    public String doGet(HttpServletRequest req){
         List<Book> books = bookService.getBooks(pageNumber, pageSize);
         int maxNumber = bookService.countPageBooks(pageSize);
         req.setAttribute("books", books);
         req.setAttribute("maxNumber", maxNumber);
         req.setAttribute("pageNumber", pageNumber);
-        forwardToJsp("editBookCatalogue", req, resp);
+        return "/editBookCatalogue";
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+    @PostMapping("/editBookCatalogue")
+    public String doPost(HttpServletRequest req){
 
         if (req.getParameter("nextPage") != null) {
             pageNumber++;
@@ -54,15 +52,15 @@ public class EditBookCatalogueServlet extends HttpServlet {
         if (req.getParameter("bookDelete") != null) {
             int bookDelete = Integer.parseInt(req.getParameter("bookDelete"));
             int countDelete = Integer.parseInt(req.getParameter("countDelete"));
-            bookService.decreaseCountBook(bookDelete, countDelete);
+            bookService.decrCountBook(bookDelete, countDelete);
             log.info("book {} decreased by {}", bookDelete, countDelete);
         }
         if (req.getParameter("bookAdd") != null) {
             int bookAdd = Integer.parseInt(req.getParameter("bookAdd"));
             int countAdd = Integer.parseInt(req.getParameter("countAdd"));
-            bookService.increaseCountBook(bookAdd, countAdd);
+            bookService.incrCountBook(bookAdd, countAdd);
             log.info("book {} increased by {}", bookAdd, countAdd);
         }
-        redirectToJsp("/editBookCatalogue", req, resp);
+        return "redirect:/editBookCatalogue";
     }
 }

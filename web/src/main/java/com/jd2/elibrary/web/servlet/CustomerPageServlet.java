@@ -4,48 +4,45 @@ import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
 import com.jd2.elibrary.model.OrderStatus;
 import com.jd2.elibrary.model.User;
-import com.jd2.elibrary.service.impl.AuthUserService;
 import com.jd2.elibrary.service.impl.BookService;
 import com.jd2.elibrary.service.impl.OrderService;
-import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
-import com.jd2.elibrary.service.impl.impl.DefaultBookService;
-import com.jd2.elibrary.service.impl.impl.DefaultOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
-import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
-
-@WebServlet("/customerPage")
-public class CustomerPageServlet extends HttpServlet {
+@Controller
+@RequestMapping
+public class CustomerPageServlet {
     private static final Logger log = LoggerFactory.getLogger(CustomerPageServlet.class);
-    private AuthUserService authUserService = DefaultAuthUserService.getInstance();
-    private BookService bookService = DefaultBookService.getInstance();
-    private OrderService orderService = DefaultOrderService.getInstance();
+    @Autowired
+    private BookService bookService;
+    @Autowired
+    private OrderService orderService;
+
     private int pageNumber = 1;
     private int pageSize = 2;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @GetMapping("/customerPage")
+    public String doGet(HttpServletRequest req) {
         List<Book> books = bookService.getBooks(pageNumber, pageSize);
         int maxNumber = bookService.countPageBooks(pageSize);
         req.setAttribute("books", books);
         req.setAttribute("maxNumber", maxNumber);
         req.setAttribute("pageNumber", pageNumber);
-        forwardToJsp("customerPage", req, resp);
+        return "/customerPage";
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @PostMapping("/customerPage")
+    public String doPost(HttpServletRequest req) {
 
         if (req.getParameter("nextPage") != null) {
             pageNumber++;
@@ -72,6 +69,8 @@ public class CustomerPageServlet extends HttpServlet {
                 if (orderFilled != null) {
                     //добавляем в него книгу по bookId (обновляем заказ)
                     orderService.updateOrder(orderFilled, bookToOrder);
+                    log.info("user {} update order {} at {}", user.getId(), orderFilled.getId(), LocalDateTime.now());
+                    //надо уменьшить кол-во этой книги на 1
                     //иначе создаем новый заказ и добавляем в него книгу
                 } else {
                     orderFilled = new Order();
@@ -80,14 +79,14 @@ public class CustomerPageServlet extends HttpServlet {
                     orderFilled.setReturnDate(LocalDate.now().plusDays(30));
                     orderFilled.setOrderStatus(OrderStatus.FILLED);
                     orderService.saveOrder(orderFilled);
+                    log.info("user {} created order {} at {}", user.getId(), orderFilled.getId(), LocalDateTime.now());
+                    //добавляем книгу в новый заказ и уменьшаем кол-во этой книги на 1
                 }
             } else {
                 //вывести сообщение о недоступности книги для заказа
             }
         }
-
-        // log.info("order {} created", orderId);
-        redirectToJsp("/customerPage", req, resp);
+        return "redirect:/customerPage";
     }
 }
 

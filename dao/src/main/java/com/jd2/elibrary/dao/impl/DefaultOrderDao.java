@@ -10,6 +10,9 @@ import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,15 +23,9 @@ import java.util.List;
 
 import static com.jd2.elibrary.model.OrderStatus.FILLED;
 
+@Repository
 public class DefaultOrderDao implements OrderDao {
-    private static DefaultOrderDao instance;
-
-    public static synchronized DefaultOrderDao getInstance() {
-        if (instance == null) {
-            instance = new DefaultOrderDao();
-        }
-        return instance;
-    }
+    private static final Logger log = LoggerFactory.getLogger(DefaultUserDao.class);
 
     @Override
     public void saveOrder(Order order) {
@@ -56,7 +53,7 @@ public class DefaultOrderDao implements OrderDao {
     public List<Book> getBooksByOrderId(int orderId) {
         OrderEntity orderEntity = OrderConverter.convertToOrderEntity(getOrderById(orderId));
         List<BookEntity> booksEntity = orderEntity.getBooksInOrder();
-        List<Book> books = BookConverter.convertListToBook(booksEntity);
+        List<Book> books = BookConverter.convertToListBook(booksEntity);
         return books;
     }
 

@@ -1,23 +1,28 @@
 package com.jd2.elibrary.service.impl.impl;
 
 import com.jd2.elibrary.dao.UserDao;
-import com.jd2.elibrary.dao.impl.DefaultUserDao;
 import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.AuthUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DefaultAuthUserService implements AuthUserService {
-    private UserDao userDao = DefaultUserDao.getInstance();
 
-    private static AuthUserService instance;
+    @Autowired
+    private UserDao userDao;
+            //= DefaultUserDao.getInstance();
 
-    public static synchronized AuthUserService getInstance() {
-        if (instance == null) {
-            instance = new DefaultAuthUserService();
-        }
-        return instance;
-    }
+//    private static AuthUserService instance;
+//
+//    public static synchronized AuthUserService getInstance() {
+//        if (instance == null) {
+//            instance = new DefaultAuthUserService();
+//        }
+//        return instance;
+//    }
 
     @Override
     public List<User> getUsers() {

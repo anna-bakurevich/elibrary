@@ -6,6 +6,7 @@ import com.jd2.elibrary.dao.entity.BookEntity;
 import com.jd2.elibrary.dao.util.EMUtil;
 import com.jd2.elibrary.model.Book;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -14,16 +15,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
+@Repository
 public class DefaultBookDao implements BookDao {
-
-    private static DefaultBookDao instance;
-
-    public static synchronized DefaultBookDao getInstance() {
-        if (instance == null) {
-            instance = new DefaultBookDao();
-        }
-        return instance;
-    }
 
     @Override
     public void saveBook(Book book) {
@@ -47,7 +40,7 @@ public class DefaultBookDao implements BookDao {
         typedQuery.setMaxResults(pageSize);
         List<BookEntity> books = typedQuery.getResultList();
 
-        return BookConverter.convertListToBook(books);
+        return BookConverter.convertToListBook(books);
 
     }
 

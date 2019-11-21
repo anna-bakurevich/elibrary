@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DefaultOrderDaoTest {
-    DefaultOrderDao dao = DefaultOrderDao.getInstance();
+    DefaultOrderDao dao = new DefaultOrderDao();
 
     public OrderEntity orderEntityForTest() {
         List<OrderEntity> orders = new ArrayList<>();

@@ -2,32 +2,30 @@ package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.AuthUserService;
-import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
-import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
-
-@WebServlet(urlPatterns = "/edit")
-public class EditServlet extends HttpServlet {
+@Controller
+@RequestMapping
+public class EditServlet {
     private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
-    private AuthUserService authUserService = DefaultAuthUserService.getInstance();
+    @Autowired
+    private AuthUserService authUserService;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        forwardToJsp("edit", req, resp);
+    @GetMapping("/edit")
+    public String doGet(HttpServletRequest req) {
+        return "/edit";
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @PostMapping("/edit")
+    public String doPost(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute("login");
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
@@ -38,6 +36,6 @@ public class EditServlet extends HttpServlet {
         authUserService.updateUser(user);
         log.info("user {} update", user.getId());
         req.getSession().setAttribute("login", user);
-        redirectToJsp("/privatePage", req, resp);
+        return "redirect:/customerPage";
     }
 }

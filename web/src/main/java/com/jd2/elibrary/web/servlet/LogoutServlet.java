@@ -1,23 +1,21 @@
 package com.jd2.elibrary.web.servlet;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
-
-@WebServlet(urlPatterns = "/logout")
-public class LogoutServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+@Controller
+@RequestMapping
+public class LogoutServlet {
+    @GetMapping("/logout")
+   public String doGet(HttpServletRequest req) {
         //удаление объекта с указанным именем из сессии
         req.getSession().removeAttribute("login");
         //установка сессии недействительной и отмена привязки объектов, связанных с ней
         req.getSession().invalidate();
         //перенаправление на страницу логина
-        forwardToJsp("login", req, resp);
+        return "/login";
     }
 }

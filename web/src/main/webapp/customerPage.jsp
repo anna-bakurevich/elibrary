@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="springc" uri="http://www.springframework.org/tags" %>
 
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="translations" var="messages"/>
@@ -11,8 +12,8 @@
 </head>
 
 <h1><fmt:message key="welcome.privatepage" bundle="${messages}"/>${login.firstName}!</h1>
-<a href="<c:url value="/logout"/>"><fmt:message key="logout" bundle="${messages}"/></a>
-<a href="<c:url value="/edit"/>"><fmt:message key="edit.heading" bundle="${messages}"/></a>
+<a href="<springc:url value="/logout"/>"><fmt:message key="logout" bundle="${messages}"/></a>
+<a href="<springc:url value="/edit"/>"><fmt:message key="edit.heading" bundle="${messages}"/></a>
 
 
 <h3><fmt:message key="catalogue" bundle="${messages}"/></h3>

@@ -8,22 +8,16 @@ import com.jd2.elibrary.model.User;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
+@Repository
 public class DefaultUserDao implements UserDao {
     private static final Logger log = LoggerFactory.getLogger(DefaultUserDao.class);
-    private static DefaultUserDao instance;
-
-    public static synchronized DefaultUserDao getInstance() {
-        if (instance == null) {
-            instance = new DefaultUserDao();
-        }
-        return instance;
-    }
 
     @Override
     public int saveUser(User user) {

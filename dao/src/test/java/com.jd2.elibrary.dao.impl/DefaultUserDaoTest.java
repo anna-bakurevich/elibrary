@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DefaultUserDaoTest {
-    DefaultUserDao dao = DefaultUserDao.getInstance();
+    DefaultUserDao dao = new DefaultUserDao();
 
     public UserEntity userEntityForTest() {
 

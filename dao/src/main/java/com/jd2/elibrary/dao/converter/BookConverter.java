@@ -38,7 +38,7 @@ public class BookConverter {
     }
 
 
-    public static List<Book> convertListToBook(List<BookEntity> booksEntity) {
+    public static List<Book> convertToListBook(List<BookEntity> booksEntity) {
         if (booksEntity == null){
             return null;
         }

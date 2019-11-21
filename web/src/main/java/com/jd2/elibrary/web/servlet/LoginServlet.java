@@ -3,47 +3,43 @@ package com.jd2.elibrary.web.servlet;
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.AuthUserService;
-import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
-import static com.jd2.elibrary.web.WebUtils.redirectToJsp;
-
-@WebServlet(urlPatterns = "/login")
-public class LoginServlet extends HttpServlet {
+@Controller
+@RequestMapping
+public class LoginServlet {
     private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
-    private AuthUserService authUserService = DefaultAuthUserService.getInstance();
+    @Autowired
+    private AuthUserService authUserService;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        forwardToJsp("login", req, resp);
+    @GetMapping("/login")
+    public String doGet(HttpServletRequest req) {
+        return "/login";
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    @PostMapping("/login")
+    public String doPost(HttpServletRequest req) {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         User user = authUserService.login(login, password);
         if (user == null) {
             req.setAttribute("error", "login or password invalid");
-            redirectToJsp("/registration", req, resp);
-            return;
+            return "/registration";
         }
         log.info("user {} logged", user.getLogin());
         req.getSession().setAttribute("login", user);
         if (user.getRole().equals(Role.LIBRARIAN)) {
-            redirectToJsp("/librarianPage", req, resp);
-        } else {
-            redirectToJsp("/customerPage", req, resp);
+            return "redirect:/librarianPage";
         }
+        return "redirect:/customerPage";
     }
 }
 

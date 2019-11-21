@@ -1,24 +1,30 @@
 package com.jd2.elibrary.service.impl.impl;
 
 import com.jd2.elibrary.dao.OrderDao;
-import com.jd2.elibrary.dao.impl.DefaultOrderDao;
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
 import com.jd2.elibrary.service.impl.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DefaultOrderService implements OrderService {
-    private OrderDao orderDao = DefaultOrderDao.getInstance();
 
-    private static DefaultOrderService instance;
+    @Autowired
+    private OrderDao orderDao;
 
-    public static synchronized DefaultOrderService getInstance() {
-        if (instance == null) {
-            instance = new DefaultOrderService();
-        }
-        return instance;
-    }
+//            = DefaultOrderDao.getInstance();
+
+//    private static DefaultOrderService instance;
+//
+//    public static synchronized DefaultOrderService getInstance() {
+//        if (instance == null) {
+//            instance = new DefaultOrderService();
+//        }
+//        return instance;
+//    }
 
 
     @Override
