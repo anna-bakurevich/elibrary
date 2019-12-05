@@ -3,95 +3,67 @@ package com.jd2.elibrary.dao.impl;
 import com.jd2.elibrary.dao.BookDao;
 import com.jd2.elibrary.dao.converter.BookConverter;
 import com.jd2.elibrary.dao.entity.BookEntity;
-import com.jd2.elibrary.dao.util.EMUtil;
+import com.jd2.elibrary.dao.repository.BookJpaRepository;
 import com.jd2.elibrary.model.Book;
-import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import java.util.Optional;
 
-@Repository
 public class DefaultBookDao implements BookDao {
+    private final BookJpaRepository bookJpaRepository;
+
+    public DefaultBookDao(BookJpaRepository bookJpaRepository) {
+        this.bookJpaRepository = bookJpaRepository;
+    }
 
     @Override
-    public void saveBook(Book book) {
+    public void save(Book book) {
         BookEntity bookEntity = BookConverter.convertToBookEntity(book);
-
-        EntityManager em = EMUtil.getEntityManager();
-        em.getTransaction().begin();
-        em.persist(bookEntity);
-        em.getTransaction().commit();
+        bookJpaRepository.save(bookEntity);
     }
 
     @Override
-    public List<Book> getBooks(int pageNumber, int pageSize) {
-        final EntityManager em = EMUtil.getEntityManager();
+    public int count() {
+        List<BookEntity> books = bookJpaRepository.findAll();
+        return books.size();
+    }
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<BookEntity> criteria = cb.createQuery(BookEntity.class);
-        criteria.from(BookEntity.class);
-        TypedQuery<BookEntity> typedQuery = em.createQuery(criteria);
-        typedQuery.setFirstResult(pageSize*(pageNumber - 1));
-        typedQuery.setMaxResults(pageSize);
-        List<BookEntity> books = typedQuery.getResultList();
-
+    @Override
+    public List<Book> findAll() {
+        List<BookEntity> books = bookJpaRepository.findAll();
         return BookConverter.convertToListBook(books);
+    }
 
+   @Override
+    public Book findById(int id) {
+        Optional<BookEntity> bookEntity = bookJpaRepository.findById(id);
+        return BookConverter.convertToBook(bookEntity.get());
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        final Session session = EMUtil.getSession();
-        Query query = session.createQuery("from BookEntity");
-        return query.getResultList();
+    public Book findByIsbn(String isbn) {
+        BookEntity bookEntity = bookJpaRepository.findByIsbn(isbn);
+        return BookConverter.convertToBook(bookEntity);
     }
 
     @Override
-    public Book getById(int id) {
-        final EntityManager em = EMUtil.getEntityManager();
-        BookEntity bookEntity = em.find(BookEntity.class, id);
-        if(bookEntity != null) {
-            return BookConverter.convertToBook(bookEntity);
-        }
-        return null;
-
+    public void updateCount(int id, int count) {
+        bookJpaRepository.updateCount(id, count);
     }
 
     @Override
-    public boolean findBookByIsbn(String isbn) {
-       final Session session = EMUtil.getSession();
-        Query query = session.createQuery("from BookEntity be where be.isbn = isbn");
-        List<BookEntity> booksEntity = query.getResultList();
-        if (booksEntity != null) {
-            return true;
-        }
-        return false;
+    public void deleteById(int id) {
+        bookJpaRepository.deleteById(id);
     }
 
     @Override
-    public void updateCountBook(Book book, int count) {
-        final Session session = EMUtil.getSession();
-        session.beginTransaction();
-        session.createQuery("update BookEntity as be set be.count = :count where id = :id")
-                .setParameter("id", book.getId())
-                .setParameter("count", count)
-                .executeUpdate();
-        session.getTransaction().commit();
-    }
-
-    @Override
-    public void removeBook(int id) {
-        final Session session = EMUtil.getSession();
-        session.getTransaction().begin();
-        BookEntity bookEntity = session.find(BookEntity.class, id);
-        session.createQuery("delete from BookEntity be where be.id = :id")
-                .setParameter("id", bookEntity.getId())
-                .executeUpdate();
-        session.getTransaction().commit();
+    public List<Book> paging(int pageNumber, int size) {
+        Page<BookEntity> booksPage = bookJpaRepository.findAll(PageRequest.of(
+                pageNumber, size, Sort.Direction.ASC, "title"));
+        List<BookEntity> books = booksPage.getContent();
+        return BookConverter.convertToListBook(books);
     }
 }

@@ -2,7 +2,7 @@ package com.jd2.elibrary.service.impl;
 
 import com.jd2.elibrary.dao.UserDao;
 import com.jd2.elibrary.model.User;
-import com.jd2.elibrary.service.impl.impl.DefaultAuthUserService;
+import com.jd2.elibrary.service.impl.impl.DefaultUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,25 +17,25 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DefaultAuthUserServiceTest {
+public class DefaultUserServiceTest {
     @Mock
     UserDao dao;
 
     @InjectMocks
-    DefaultAuthUserService service;
+    DefaultUserService service;
 
     @Test
-    void getUsersTest() {
-        when(dao.getUsers()).thenReturn(new ArrayList<User>());
-        List<User> users = service.getUsers();
+    void findAllTest() {
+        when(dao.findAll()).thenReturn(new ArrayList<User>());
+        List<User> users = service.findAll();
         assertNotNull(users);
     }
     @Test
     void loginTest() {
-        when(dao.getByLogin("Anna")).thenReturn(new User(null, null, null, "Anna","123"));
+        when(dao.findByLogin("Anna")).thenReturn(new User(null, null, null, "Anna","123"));
         User user = service.login("Anna", "123");
         assertNotNull(user);
-        when(dao.getByLogin("Ivan")).thenReturn(null);
+        when(dao.findByLogin("Ivan")).thenReturn(null);
         User user1 = service.login("Ivan", "123");
         assertNull(user1);
     }
@@ -47,24 +47,24 @@ public class DefaultAuthUserServiceTest {
     }
 
     @Test
-    void getByIdTest(){
+    void findByIdTest(){
         User user = new User();
         user.setId(1);
-        when((dao.getById(1))).thenReturn(user);
-        assertNotNull(service.id(1));
+        when((dao.findById(1))).thenReturn(user);
+        assertNotNull(service.findById(1));
     }
 
     @Test
-    void saveUserTest(){
+    void saveTest(){
         User user = new User();
-        service.saveUser(user);
-        verify(dao).saveUser(user);
+        service.save(user);
+        verify(dao).save(user);
     }
 
     @Test
-    void removeUserTest(){
-        service.removeUser(1);
-        verify(dao).removeUser(1);
+    void deleteByIdTest(){
+        service.deleteById(1);
+        verify(dao).deleteById(1);
     }
 
     @Test
@@ -78,11 +78,11 @@ public class DefaultAuthUserServiceTest {
     }
 
 @Test
-    void idIsExistTest(){
+    void existByIdTest(){
     User user = new User();
     user.setId(100);
-    when(dao.findById(100)).thenReturn(true);
-    assertTrue(service.idIsExist(100));
-    assertFalse(service.idIsExist(1000));
+    when(dao.existsById(100)).thenReturn(true);
+    assertTrue(service.existsById(100));
+    assertFalse(service.existsById(1000));
 }
 }

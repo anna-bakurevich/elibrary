@@ -1,7 +1,7 @@
 package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.User;
-import com.jd2.elibrary.service.impl.AuthUserService;
+import com.jd2.elibrary.service.impl.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ import java.util.List;
 public class LibrarianPageServlet {
     private static final Logger log = LoggerFactory.getLogger(CustomerPageServlet.class);
     @Autowired
-    private AuthUserService authUserService;
+    private UserService userService;
 
     @GetMapping("/librarianPage")
     public String doGet(HttpServletRequest req) {
-        List<User> users = authUserService.getUsers();
+        List<User> users = userService.findAll();
         req.setAttribute("users", users);
         return "/librarianPage";
     }
@@ -30,8 +30,8 @@ public class LibrarianPageServlet {
     @PostMapping("/librarianPage")
     public String doPost(HttpServletRequest req) {
         int userId = Integer.parseInt(req.getParameter("deleteId"));
-        if (authUserService.idIsExist(userId)) {
-            authUserService.removeUser(userId);
+        if (userService.existsById(userId)) {
+            userService.deleteById(userId);
             log.info("user {} deleted", userId);
         }
         return "redirect:/librarianPage";

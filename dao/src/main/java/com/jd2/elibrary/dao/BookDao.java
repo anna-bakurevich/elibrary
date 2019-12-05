@@ -7,17 +7,22 @@ import java.util.List;
 public interface BookDao {
 
     //create
-    void saveBook(Book book);
+    void save(Book book);
 
     //read
-    List<Book> getBooks(int pageNumber, int pageSize);
-    List<Book> getAllBooks();
-    Book getById(int id);
-    boolean findBookByIsbn(String isbn);
+    int count();
+
+    List<Book> findAll();
+
+    List<Book> paging(int pageNumber, int size);
+
+    Book findById(int id);
+
+    Book findByIsbn(String isbn);
 
     //update
-    void updateCountBook(Book book, int count);
+    void updateCount(int id, int count);
 
     //delete
-    void removeBook(int id);
+    void deleteById(int id);
 }

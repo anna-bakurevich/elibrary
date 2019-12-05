@@ -2,20 +2,25 @@ package com.jd2.elibrary.service.impl;
 
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
+import com.jd2.elibrary.model.User;
 
 import java.util.List;
 
 public interface OrderService {
-    List<Order> getOrders();
+
+    void save(Order order);
+
+    List<Order> findAll();
+
+    void update(Order order, int bookId);
+
     List<Book> getBooksByOrderId(int orderId);
 
-    boolean orderIsExist(int userId);
+    boolean existById(int userId);
 
-    void saveOrder(Order order);
+    boolean existByUser(User user);
 
-    void updateOrder(Order order, int bookId);
+    List<Order> findAllByUserId(int userId);
 
-    List<Order> getOrderByUserId(int userId);
-
-    Order getOrderFilledByUserId(int userId);
+    Order findOrderFilledByUserId(int userId);
 }

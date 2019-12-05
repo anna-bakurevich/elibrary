@@ -25,7 +25,7 @@ public class EditBookCatalogueServlet {
 
     @GetMapping("/editBookCatalogue")
     public String doGet(HttpServletRequest req){
-        List<Book> books = bookService.getBooks(pageNumber, pageSize);
+        List<Book> books = bookService.paging(pageNumber, pageSize);
         int maxNumber = bookService.countPageBooks(pageSize);
         req.setAttribute("books", books);
         req.setAttribute("maxNumber", maxNumber);
@@ -39,14 +39,14 @@ public class EditBookCatalogueServlet {
         if (req.getParameter("nextPage") != null) {
             pageNumber++;
             req.setAttribute("pageNumber", pageNumber);
-            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            List<Book> books = bookService.paging(pageNumber, pageSize);
             req.setAttribute("books", books);
         }
 
         if (req.getParameter("prevPage") != null) {
             pageNumber--;
             req.setAttribute("pageNumber", pageNumber);
-            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            List<Book> books = bookService.paging(pageNumber, pageSize);
             req.setAttribute("books", books);
         }
         if (req.getParameter("bookDelete") != null) {

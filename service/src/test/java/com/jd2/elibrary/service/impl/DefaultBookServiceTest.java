@@ -9,9 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
@@ -25,27 +22,50 @@ class DefaultBookServiceTest {
     @InjectMocks
     DefaultBookService service;
 
-    @Test
-    void getBooksTest() {
-        when(dao.getBooks(1, 2)).thenReturn(new ArrayList<Book>());
-        List<Book> books = service.getBooks(1,2);
-        assertNotNull(books);
-    }
+//    @Test
+//    void getBooksTest() {
+//        when(dao.findAll()).thenReturn(new ArrayList<Book>());
+//        List<Book> books = service.paging(1,2);
+//        assertNotNull(books);
+//    }
 
 
     @Test
     void getByIdTest() {
         Book book = new Book();
         book.setId(1);
-        when(dao.getById(1)).thenReturn(book);
-        assertNotNull(service.getById(1));
-        assertNull(service.getById(100));
+        when(dao.findById(1)).thenReturn(book);
+        assertNotNull(service.findById(1));
+        assertNull(service.findById(100));
     }
 
     @Test
     void saveBookTest() {
         Book book = new Book();
-        service.saveBook(book);
-        verify(dao).saveBook(book);
+        service.save(book);
+        verify(dao).save(book);
+    }
+
+//    @Test
+//    void incrCountBookTest(){
+//        Book book = new Book();
+//        book.setCount(5);
+//        System.out.println(book.getCount());
+//        when(dao.findById(book.getId())).thenReturn(book);
+//        service.incrCountBook(book.getId(),1);
+//        verify(dao).updateCount(any(), eq(6));
+//    }
+
+//    @Test
+//    void decrCountBookTest(){
+//        Book book = new Book();
+//        book.setCount(5);
+//        when(dao.findById(1)).thenReturn(book);
+//        service.decrCountBook(1,1);
+//        verify(dao).updateCount(any(), eq(4));
+//    }
+
+    @Test
+    void countPageBooksTest(){
     }
 }

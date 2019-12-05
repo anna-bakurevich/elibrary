@@ -6,6 +6,8 @@ import com.jd2.elibrary.model.OrderStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,9 +19,16 @@ public class OrderConverterTest {
     }
 
     @Test
-    void toOrderEntity() {
+    void toOrderEntityNull() {
         final OrderEntity orderEntity = OrderConverter.convertToOrderEntity(null);
         assertNull(null);
+    }
+
+
+    @Test
+    void toListOrderNull() {
+        final List<Order> orderList = OrderConverter.convertToListOrder(null);
+        assertNull(orderList);
     }
 
     @Test
@@ -49,5 +58,15 @@ public class OrderConverterTest {
         assertEquals(order.getId(), orderEntity.getId());
         assertEquals(order.getOrderStatus(), orderEntity.getOrderStatus());
         assertEquals(order.getReturnDate(), orderEntity.getReturnDate());
+    }
+
+
+    @Test
+    void toListOrderNotNull() {
+        final List<OrderEntity> orderEntityList = Arrays.asList(new OrderEntity(), new OrderEntity());
+
+        final List<Order> orderList = OrderConverter.convertToListOrder(orderEntityList);
+        assertNotNull(orderList);
+        assertEquals(orderEntityList.size(), orderList.size());
     }
 }

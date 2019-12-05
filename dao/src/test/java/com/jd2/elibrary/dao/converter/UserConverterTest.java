@@ -5,6 +5,9 @@ import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserConverterTest {
@@ -18,6 +21,12 @@ public class UserConverterTest {
     void toUserEntityNull() {
         final UserEntity userEntity = UserConverter.convertToUserEntity(null);
         assertNull(userEntity);
+    }
+
+    @Test
+    void toListUserNull() {
+        final List<User> userList = UserConverter.convertToListUser(null);
+        assertNull(userList);
     }
 
     @Test
@@ -40,7 +49,7 @@ public class UserConverterTest {
 
     @Test
     void toUserEntityNotNull() {
-final User user = new User();
+        final User user = new User();
         user.setId(1);
         user.setRole(Role.LIBRARIAN);
         user.setLastName("Anna");
@@ -54,5 +63,14 @@ final User user = new User();
         assertEquals(user.getId(), userEntity.getId());
         assertEquals(user.getFirstName(), userEntity.getFirstName());
         assertEquals(user.getRole(), userEntity.getRole());
+    }
+
+    @Test
+    void toListUserNotNull() {
+        final List<UserEntity> userEntityList = Arrays.asList(new UserEntity(), new UserEntity());
+
+        final List<User> userList = UserConverter.convertToListUser(userEntityList);
+        assertNotNull(userList);
+        assertEquals(userEntityList.size(), userList.size());
     }
 }

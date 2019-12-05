@@ -6,20 +6,22 @@ import java.util.List;
 
 public interface UserDao {
     //create
-    int saveUser(User user);
+    int save(User user);
 
     //read
-    List<User> getUsers();
-    User getByLogin(String login);
-    User getById(int id);
+    List<User> findAll();
+
+    User findByLogin(String login);
+
+    User findById(int id);
+
     int getIdByLogin(String login);
-    boolean findById(int id);
+
+    boolean existsById(int id);
 
     //update
-    void updateUser(User user);
+    void update(User user, String firstName, String lastName, String phone);
 
     //delete
-    void removeUser(int id);
-
-
+    void deleteById(int id);
 }

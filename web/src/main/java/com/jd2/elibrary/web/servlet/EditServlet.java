@@ -1,7 +1,7 @@
 package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.User;
-import com.jd2.elibrary.service.impl.AuthUserService;
+import com.jd2.elibrary.service.impl.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public class EditServlet {
     private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
     @Autowired
-    private AuthUserService authUserService;
+    private UserService userService;
 
     @GetMapping("/edit")
     public String doGet(HttpServletRequest req) {
@@ -33,7 +33,7 @@ public class EditServlet {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPhone(phone);
-        authUserService.updateUser(user);
+        userService.update(user, firstName, lastName, phone);
         log.info("user {} update", user.getId());
         req.getSession().setAttribute("login", user);
         return "redirect:/customerPage";

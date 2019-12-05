@@ -39,7 +39,6 @@
                     <form method="post" action="${pageContext.request.contextPath}/customerPage">
                         <input name="bookToOrder" type="hidden" value="${book.id}">
                         <input type="submit" value=<fmt:message key="order" bundle="${messages}"/>>
-                        <input name="countToOrder" type="number" min=0 max=1 value=0 style="width: 40px">
                     </form>
                 </td>
             </tr>
@@ -58,3 +57,4 @@
         <input name="nextPage" type="submit" value=<fmt:message key="button.next" bundle="${messages}"/>>
     </c:if>
 </form>
+<a href="<springc:url value="/order"/>"><fmt:message key="order.heading" bundle="${messages}"/></a>

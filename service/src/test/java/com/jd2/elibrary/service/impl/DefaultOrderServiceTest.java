@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +29,9 @@ public class DefaultOrderServiceTest {
     DefaultOrderService service;
 
     @Test
-    void getOrdersTest() {
-        when(dao.getOrders()).thenReturn(new ArrayList<Order>());
-        List<Order> orders = service.getOrders();
+    void findAllTest() {
+        when(dao.findAll()).thenReturn(new ArrayList<Order>());
+        List<Order> orders = service.findAll();
         assertNotNull(orders);
     }
 
@@ -38,41 +39,46 @@ public class DefaultOrderServiceTest {
     void getBooksByOrderIdTest() {
         when(dao.getBooksByOrderId(1)).thenReturn(new ArrayList<Book>());
         List<Book> books = service.getBooksByOrderId(1);
-        assertNull(books);
+        assertNotNull(books);
+        assertEquals(0, books.size());
     }
 
     @Test
     void orderIsExistTest() {
-        when(dao.findById(1)).thenReturn(true);
-        assertTrue(service.orderIsExist(1));
-        assertFalse(service.orderIsExist(2));
+        when(dao.existsById(1)).thenReturn(true);
+        assertTrue(service.existById(1));
+        assertFalse(service.existById(2));
     }
 
     @Test
-    void getOrderByUserIdTest() {
-        when(dao.getOrdersByUserId(1)).thenReturn(new ArrayList<Order>());
-        List<Order> orders = service.getOrderByUserId(1);
+    void findAllByUserIdTest() {
+        when(dao.findAllByUserId(1)).thenReturn(new ArrayList<Order>());
+        List<Order> orders = service.findAllByUserId(1);
         assertNotNull(orders);
     }
 
     @Test
     void getOrderFilledByUserIdTest() {
-        when(dao.getOrderFilledByUserId(1)).thenReturn(new Order());
-        Order order = service.getOrderFilledByUserId(1);
+        Order orderFilled = new Order();
+        orderFilled.setOrderStatus(OrderStatus.FILLED);
+        List<Order> orders = Arrays.asList(orderFilled);
+        when(dao.findOrderByOrderStatusAndUser(OrderStatus.FILLED, 1)).thenReturn(orders);
+        Order order = service.findOrderFilledByUserId(1);
         assertNotNull(order);
+        assertEquals(OrderStatus.FILLED, order.getOrderStatus());
     }
 
     @Test
-    void updateOrderTest() {
+    void updateTest() {
         Order order = new Order(100, new User(), null, null, OrderStatus.FILLED);
-        service.updateOrder(order, 1);
+        service.update(order, 1);
         verify(dao).updateOrder(order, 1);
     }
 
     @Test
     void saveOrderTest() {
         Order order = new Order(100, new User(), null, null, OrderStatus.FILLED);
-        service.saveOrder(order);
-        verify(dao).saveOrder(order);
+        service.save(order);
+        verify(dao).save(order);
     }
 }

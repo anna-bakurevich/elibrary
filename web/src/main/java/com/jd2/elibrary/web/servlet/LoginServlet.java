@@ -2,7 +2,7 @@ package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
-import com.jd2.elibrary.service.impl.AuthUserService;
+import com.jd2.elibrary.service.impl.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginServlet {
     private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
     @Autowired
-    private AuthUserService authUserService;
+    private UserService userService;
 
     @GetMapping("/login")
     public String doGet(HttpServletRequest req) {
@@ -29,7 +29,7 @@ public class LoginServlet {
     public String doPost(HttpServletRequest req) {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        User user = authUserService.login(login, password);
+        User user = userService.login(login, password);
         if (user == null) {
             req.setAttribute("error", "login or password invalid");
             return "/registration";

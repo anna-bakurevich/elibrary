@@ -2,7 +2,7 @@ package com.jd2.elibrary.web.servlet;
 
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
-import com.jd2.elibrary.service.impl.AuthUserService;
+import com.jd2.elibrary.service.impl.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RegistrationServlet {
     private static final Logger log = LoggerFactory.getLogger(RegistrationServlet.class);
     @Autowired
-    AuthUserService authUserService;
+    UserService userService;
 
     @GetMapping("/registration")
     public String doGet(HttpServletRequest req) {
@@ -36,7 +36,7 @@ public class RegistrationServlet {
         String password = req.getParameter("password");
 
         //если пользователя нет в базе, добавляем его
-        if (!authUserService.loginIsExist(login)) {
+        if (!userService.loginIsExist(login)) {
             User user = new User();
             user.setFirstName(firstName);
             user.setLastName(lastName);
@@ -44,7 +44,7 @@ public class RegistrationServlet {
             user.setLogin(login);
             user.setPassword(password);
             user.setRole(Role.CUSTOMER);
-            authUserService.saveUser(user);
+            userService.save(user);
             log.info("user {} registered", login);
             req.getSession().setAttribute("login", user);
             return "/customerPage";

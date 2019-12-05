@@ -3,6 +3,9 @@ package com.jd2.elibrary.dao.converter;
 import com.jd2.elibrary.dao.entity.UserEntity;
 import com.jd2.elibrary.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserConverter {
     public static UserEntity convertToUserEntity(User user) {
         if (user == null) {
@@ -32,5 +35,16 @@ public class UserConverter {
         user.setPassword(userEntity.getPassword());
         user.setRole(userEntity.getRole());
         return user;
+    }
+
+    public static List<User> convertToListUser(List<UserEntity> userEntities) {
+        if (userEntities == null){
+            return null;
+        }
+        final List<User> users = new ArrayList<>();
+        for (UserEntity ue : userEntities) {
+            users.add(convertToUser(ue));
+        }
+        return users;
     }
 }

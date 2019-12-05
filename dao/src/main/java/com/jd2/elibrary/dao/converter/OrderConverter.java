@@ -3,6 +3,9 @@ package com.jd2.elibrary.dao.converter;
 import com.jd2.elibrary.dao.entity.OrderEntity;
 import com.jd2.elibrary.model.Order;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.jd2.elibrary.dao.converter.UserConverter.convertToUser;
 import static com.jd2.elibrary.dao.converter.UserConverter.convertToUserEntity;
 
@@ -31,5 +34,16 @@ public class OrderConverter {
         order.setReturnDate(orderEntity.getReturnDate());
         order.setOrderStatus(orderEntity.getOrderStatus());
         return order;
+    }
+
+    public static List<Order> convertToListOrder(List<OrderEntity> orderEntities) {
+        if (orderEntities == null){
+            return null;
+        }
+        final List<Order> orders = new ArrayList<>();
+        for (OrderEntity oe : orderEntities) {
+            orders.add(convertToOrder(oe));
+        }
+        return orders;
     }
 }

@@ -2,26 +2,37 @@ package com.jd2.elibrary.dao;
 
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
+import com.jd2.elibrary.model.OrderStatus;
+import com.jd2.elibrary.model.User;
 
 import java.util.List;
 
 public interface OrderDao {
     //create
-    void saveOrder(Order order);
+    void save(Order order);
 
     //read
-    List<Order> getOrders();
-    Order getOrderById(int id);
+    Order findByOrderStatus(OrderStatus orderStatus);
+
+    List<Order> findAll();
+
+    List<Order> findAllByUserId(int userId);
+
+    List<Order> findOrderByOrderStatusAndUser(OrderStatus orderStatus, int userId);
+
+    Order findById(int id);
+
     List<Book> getBooksByOrderId(int orderId);
-    List<Order> getOrdersByUserId(int userId);
-    Order getOrderFilledByUserId(int userId);
-    boolean findById(int id);
+
+    boolean existsById(int id);
+
+    boolean existByUser(User user);
 
     //update
     void updateOrder(Order order, int bookId);
 
     //delete
-    void removeOrder(Order order);
+    void deleteById(int id);
 
 
 }

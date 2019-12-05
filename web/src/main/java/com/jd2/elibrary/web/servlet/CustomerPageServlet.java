@@ -33,7 +33,7 @@ public class CustomerPageServlet {
 
     @GetMapping("/customerPage")
     public String doGet(HttpServletRequest req) {
-        List<Book> books = bookService.getBooks(pageNumber, pageSize);
+        List<Book> books = bookService.paging(pageNumber, pageSize);
         int maxNumber = bookService.countPageBooks(pageSize);
         req.setAttribute("books", books);
         req.setAttribute("maxNumber", maxNumber);
@@ -47,30 +47,32 @@ public class CustomerPageServlet {
         if (req.getParameter("nextPage") != null) {
             pageNumber++;
             req.setAttribute("pageNumber", pageNumber);
-            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            List<Book> books = bookService.paging(pageNumber, pageSize);
             req.setAttribute("books", books);
         }
         if (req.getParameter("prevPage") != null) {
             pageNumber--;
             req.setAttribute("pageNumber", pageNumber);
-            List<Book> books = bookService.getBooks(pageNumber, pageSize);
+            List<Book> books = bookService.paging(pageNumber, pageSize);
             req.setAttribute("books", books);
         }
 
         if (req.getParameter("bookToOrder") != null) {
             int bookToOrder = Integer.parseInt(req.getParameter("bookToOrder"));
-            int countToOrder = Integer.parseInt(req.getParameter("countToOrder"));
-            int count = bookService.getById(bookToOrder).getCount();
+            int count = bookService.findById(bookToOrder).getCount();
             User user = (User) req.getSession().getAttribute("login");
             //пытаемся получить оформляющийся заказ
-            Order orderFilled = orderService.getOrderFilledByUserId(user.getId());
+            Order orderFilled = orderService.findOrderFilledByUserId(user.getId());
 
+            //если книга имеется в наличии
             if (count > 0) {
+                //если уже есть заказ со статусом "оформляется"
                 if (orderFilled != null) {
                     //добавляем в него книгу по bookId (обновляем заказ)
-                    orderService.updateOrder(orderFilled, bookToOrder);
+                    orderService.update(orderFilled, bookToOrder);
                     log.info("user {} update order {} at {}", user.getId(), orderFilled.getId(), LocalDateTime.now());
-                    //надо уменьшить кол-во этой книги на 1
+                    //уменьшаем в каталоге кол-во этой книги на 1
+                    bookService.decrCountBook(bookToOrder,1);
                     //иначе создаем новый заказ и добавляем в него книгу
                 } else {
                     orderFilled = new Order();
@@ -78,9 +80,13 @@ public class CustomerPageServlet {
                     orderFilled.setOrderDate(LocalDate.now());
                     orderFilled.setReturnDate(LocalDate.now().plusDays(30));
                     orderFilled.setOrderStatus(OrderStatus.FILLED);
-                    orderService.saveOrder(orderFilled);
-                    log.info("user {} created order {} at {}", user.getId(), orderFilled.getId(), LocalDateTime.now());
-                    //добавляем книгу в новый заказ и уменьшаем кол-во этой книги на 1
+                    orderService.save(orderFilled);
+                    Order order = orderService.findOrderFilledByUserId(user.getId());
+                    log.info("user {} created order {} at {}", user.getId(), order.getId(), LocalDateTime.now());
+                    //добавляем книгу в новый заказ
+                    orderService.update(order, bookToOrder);
+                    //уменьшаем в каталоге кол-во этой книги на 1
+                    bookService.decrCountBook(bookToOrder, 1);
                 }
             } else {
                 //вывести сообщение о недоступности книги для заказа

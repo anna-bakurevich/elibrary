@@ -3,68 +3,71 @@ package com.jd2.elibrary.service.impl.impl;
 import com.jd2.elibrary.dao.OrderDao;
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
+import com.jd2.elibrary.model.OrderStatus;
+import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class DefaultOrderService implements OrderService {
 
-    @Autowired
-    private OrderDao orderDao;
+    private final OrderDao defaultOrderDao;
 
-//            = DefaultOrderDao.getInstance();
-
-//    private static DefaultOrderService instance;
-//
-//    public static synchronized DefaultOrderService getInstance() {
-//        if (instance == null) {
-//            instance = new DefaultOrderService();
-//        }
-//        return instance;
-//    }
+    public DefaultOrderService(OrderDao defaultOrderDao) {
+        this.defaultOrderDao = defaultOrderDao;
+    }
 
 
     @Override
-    public List<Order> getOrders() {
-        return orderDao.getOrders();
+    @Transactional
+    public void save(Order order) {
+        defaultOrderDao.save(order);
     }
 
     @Override
+    @Transactional
+    public List<Order> findAll() {
+        return defaultOrderDao.findAll();
+    }
+
+    @Override
+    @Transactional
+    public void update(Order order, int bookId) {
+        defaultOrderDao.updateOrder(order, bookId);
+    }
+
+    @Override
+    @Transactional
     public List<Book> getBooksByOrderId(int orderId) {
-        orderDao.getBooksByOrderId(orderId);
-
-        return null;
+        defaultOrderDao.getBooksByOrderId(orderId);
+        return defaultOrderDao.getBooksByOrderId(orderId);
     }
 
     @Override
-    public boolean orderIsExist(int userId) {
-        if (orderDao.findById(userId)) {
-            return true;
-        }
-        return false;
+    @Transactional
+    public boolean existById(int id) {
+        return defaultOrderDao.existsById(id);
     }
 
     @Override
-    public List<Order> getOrderByUserId(int userId) {
-        return orderDao.getOrdersByUserId(userId);
+    @Transactional
+    public boolean existByUser(User user){
+        return defaultOrderDao.existByUser(user);
     }
 
     @Override
-    public Order getOrderFilledByUserId(int userId) {
-        return orderDao.getOrderFilledByUserId(userId);
+    @Transactional
+    public List<Order> findAllByUserId(int userId) {
+        return defaultOrderDao.findAllByUserId(userId);
     }
 
     @Override
-    public void saveOrder(Order order) {
-        orderDao.saveOrder(order);
-    }
-
-    @Override
-    public void updateOrder(Order order, int bookId) {
-        orderDao.updateOrder(order, bookId);
+    @Transactional
+    public Order findOrderFilledByUserId(int userId) {
+        return defaultOrderDao.findOrderByOrderStatusAndUser(OrderStatus.FILLED, userId).get(0);
     }
 
 
