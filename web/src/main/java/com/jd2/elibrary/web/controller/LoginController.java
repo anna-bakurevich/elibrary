@@ -1,28 +1,36 @@
-package com.jd2.elibrary.web.servlet;
+package com.jd2.elibrary.web.controller;
 
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping
-public class LoginServlet {
-    private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
-    @Autowired
-    private UserService userService;
+public class LoginController {
+    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
+
+    private final UserService userService;
+
+    public LoginController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/login")
-    public String doGet(HttpServletRequest req) {
-        return "/login";
+    public String doGet(HttpSession session) {
+        Object authUser = session.getAttribute("login");
+        if (authUser == null) {
+            return "/login";
+        }
+        return "redirect:/customerPage";
     }
 
     @PostMapping("/login")

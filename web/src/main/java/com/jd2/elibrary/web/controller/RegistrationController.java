@@ -1,26 +1,27 @@
-package com.jd2.elibrary.web.servlet;
+package com.jd2.elibrary.web.controller;
 
 import com.jd2.elibrary.model.Role;
 import com.jd2.elibrary.model.User;
 import com.jd2.elibrary.service.impl.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping
-@WebServlet(urlPatterns = "/registration")
-public class RegistrationServlet {
-    private static final Logger log = LoggerFactory.getLogger(RegistrationServlet.class);
-    @Autowired
-    UserService userService;
+public class RegistrationController {
+    private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
+
+    private final UserService userService;
+
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/registration")
     public String doGet(HttpServletRequest req) {

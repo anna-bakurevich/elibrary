@@ -1,4 +1,4 @@
-package com.jd2.elibrary.web.servlet;
+package com.jd2.elibrary.web.controller;
 
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.model.Order;
@@ -8,7 +8,6 @@ import com.jd2.elibrary.service.impl.BookService;
 import com.jd2.elibrary.service.impl.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,28 +19,32 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-@RequestMapping
-public class CustomerPageServlet {
-    private static final Logger log = LoggerFactory.getLogger(CustomerPageServlet.class);
-    @Autowired
-    private BookService bookService;
-    @Autowired
-    private OrderService orderService;
+@RequestMapping("/customerPage")
+public class CustomerPageController {
+    private static final Logger log = LoggerFactory.getLogger(CustomerPageController.class);
+
+    private final BookService bookService;
+    private final OrderService orderService;
+
+    public CustomerPageController(BookService bookService, OrderService orderService) {
+        this.bookService = bookService;
+        this.orderService = orderService;
+    }
 
     private int pageNumber = 1;
     private int pageSize = 2;
 
-    @GetMapping("/customerPage")
+    @GetMapping()
     public String doGet(HttpServletRequest req) {
         List<Book> books = bookService.paging(pageNumber, pageSize);
         int maxNumber = bookService.countPageBooks(pageSize);
         req.setAttribute("books", books);
         req.setAttribute("maxNumber", maxNumber);
         req.setAttribute("pageNumber", pageNumber);
-        return "/customerPage";
+        return "customerPage";
     }
 
-    @PostMapping("/customerPage")
+    @PostMapping()
     public String doPost(HttpServletRequest req) {
 
         if (req.getParameter("nextPage") != null) {

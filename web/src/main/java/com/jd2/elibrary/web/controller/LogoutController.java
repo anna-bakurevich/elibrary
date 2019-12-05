@@ -1,4 +1,4 @@
-package com.jd2.elibrary.web.servlet;
+package com.jd2.elibrary.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping
-public class LogoutServlet {
+public class LogoutController {
+
     @GetMapping("/logout")
    public String doGet(HttpServletRequest req) {
         //удаление объекта с указанным именем из сессии

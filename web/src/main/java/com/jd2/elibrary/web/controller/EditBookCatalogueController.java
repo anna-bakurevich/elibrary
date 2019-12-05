@@ -1,10 +1,9 @@
-package com.jd2.elibrary.web.servlet;
+package com.jd2.elibrary.web.controller;
 
 import com.jd2.elibrary.model.Book;
 import com.jd2.elibrary.service.impl.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +14,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping
-public class EditBookCatalogueServlet {
-    private static final Logger log = LoggerFactory.getLogger(CustomerPageServlet.class);
-    @Autowired
-    private BookService bookService;
+public class EditBookCatalogueController {
+    private static final Logger log = LoggerFactory.getLogger(EditBookCatalogueController.class);
+
+    private final BookService bookService;
+
+    public EditBookCatalogueController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     private int pageNumber = 1;
     private int pageSize = 2;

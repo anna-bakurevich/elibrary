@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.jd2.elibrary.web.WebUtils.forwardToJsp;
-
 @WebFilter("/index")
 public class AuthFilter implements Filter {
     @Override
@@ -23,7 +21,7 @@ public class AuthFilter implements Filter {
 
         //если пользователя нет в системе перенаправляем его на страницу логина
         if (authUser == null) {
-            forwardToJsp("login", request, response);
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         filterChain.doFilter(request, response);
