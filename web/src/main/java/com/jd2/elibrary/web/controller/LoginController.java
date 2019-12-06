@@ -28,7 +28,7 @@ public class LoginController {
     public String doGet(HttpSession session) {
         Object authUser = session.getAttribute("login");
         if (authUser == null) {
-            return "/login";
+            return "login";
         }
         return "redirect:/customerPage";
     }
@@ -40,7 +40,7 @@ public class LoginController {
         User user = userService.login(login, password);
         if (user == null) {
             req.setAttribute("error", "login or password invalid");
-            return "/registration";
+            return "registration";
         }
         log.info("user {} logged", user.getLogin());
         req.getSession().setAttribute("login", user);

@@ -27,7 +27,7 @@ public class LibrarianPageController {
     public String doGet(HttpServletRequest req) {
         List<User> users = userService.findAll();
         req.setAttribute("users", users);
-        return "/librarianPage";
+        return "librarianPage";
     }
 
     @PostMapping("/librarianPage")

@@ -17,6 +17,6 @@ public class LogoutController {
         //установка сессии недействительной и отмена привязки объектов, связанных с ней
         req.getSession().invalidate();
         //перенаправление на страницу логина
-        return "/login";
+        return "login";
     }
 }

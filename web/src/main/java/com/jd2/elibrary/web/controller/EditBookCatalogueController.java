@@ -33,7 +33,7 @@ public class EditBookCatalogueController {
         req.setAttribute("books", books);
         req.setAttribute("maxNumber", maxNumber);
         req.setAttribute("pageNumber", pageNumber);
-        return "/editBookCatalogue";
+        return "editBookCatalogue";
     }
 
     @PostMapping("/editBookCatalogue")

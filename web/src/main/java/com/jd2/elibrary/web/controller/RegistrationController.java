@@ -48,10 +48,10 @@ public class RegistrationController {
             userService.save(user);
             log.info("user {} registered", login);
             req.getSession().setAttribute("login", user);
-            return "/customerPage";
+            return "customerPage";
         }
             req.setAttribute("error", true);
             log.info("user is not registered");
-            return "/registration";
+            return "registration";
     }
 }

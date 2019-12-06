@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="default" template="/WEB-INF/view/layouts/default.jsp">
+        <put-attribute name="header" value="/WEB-INF/view/common/header.jsp"/>
+        <put-attribute name="body" value=""/>
+        <put-attribute name="footer" value="/WEB-INF/view/common/footer.jsp"/>
+    </definition>
+
+    <definition name="customerPage" extends="default">
+        <put-attribute name="body" value="/customerPage.jsp"/>
+    </definition>
+
+    <definition name="edit" extends="default">
+        <put-attribute name="body" value="/edit.jsp"/>
+    </definition>
+
+    <definition name="editBookCatalogue" extends="default">
+        <put-attribute name="body" value="/editBookCatalogue.jsp"/>
+    </definition>
+
+    <definition name="index" extends="default">
+        <put-attribute name="body" value="/index.jsp"/>
+    </definition>
+
+    <definition name="librarianPage" extends="default">
+        <put-attribute name="body" value="/librarianPage.jsp"/>
+    </definition>
+
+    <definition name="login" extends="default">
+        <put-attribute name="body" value="/login.jsp"/>
+    </definition>
+
+    <definition name="order" extends="default">
+        <put-attribute name="body" value="/order.jsp"/>
+    </definition>
+
+    <definition name="registration" extends="default">
+        <put-attribute name="body" value="/registration.jsp"/>
+    </definition>
+
+</tiles-definitions>
